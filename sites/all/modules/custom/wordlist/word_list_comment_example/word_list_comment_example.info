@@ -1,0 +1,10 @@
+name = Word list comment example
+description = An example of how Word list can be used to unpublish new comments containing specified words.
+core = 7.x
+package = Features
+dependencies[] = comment
+dependencies[] = entity
+dependencies[] = rules
+dependencies[] = wordlist
+features[features_api][] = api:2
+features[rules_config][] = rules_check_if_new_comments_contains_words_from_word_list

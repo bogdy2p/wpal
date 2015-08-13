@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Wordlist Rules 
+ */
+
+/**
  * Implements hook_rules_condition_info().
  * @return type
  */
