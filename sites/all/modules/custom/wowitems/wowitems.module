@@ -27,29 +27,109 @@ function wowitems_menu() {
  */
 function wowitems_page() {
 
+  $sql = "SELECT * FROM `command`";
+  // Switch to the external DB
+  db_set_active('wowcms');
+
+// Get some data. The same rules about accessing the API functions apply here.
+  $results = db_query($sql);
+  echo "<pre>";
+  foreach ($results as $result) {
+    print_r($result->name);
+    echo" <br />";
+  }
+
+// Switch back to the default db.
+  db_set_active('default');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //  db_close();
 //  db_select('wowcms');
 //  Database::closeConnection('default');
 //  Database::closeConnection('wowdrupal');
 //  $asd = Database::getConnection('default', 'wowcms');
-
-  $conn2 = Database::getConnection('wowcms', 'wowcms');
-  
-  $conn2->query($query);
-  
-  
-echo"<pre>";
-  print_r($query->select('creature'));
-  
-  
-  
-  $asd = $query->exec('SELECT * FROM `creature`');
-  
-  print_r($asd);
+//  $connection = Database::getConnection('wowcms', 'wowcms');
+//
+//  $result = db_query('SELECT n.nid, n.title, n.created
+//FROM {node} n WHERE n.uid = :uid', array(':uid' => $uid));
+//  
+//  
+//  $queryString = "SELECT * FROM `item_template`";
+//  $results = $connection->query($queryString);
+//
+////  $all2 = $results->fetchObject();
+//
+//  $all3 = $results->fetchObject();
+//  //
+//  //
+////  $all = $asd->fetchAllKeyed();
+//
+//
+//  print_r(count($results));
+//
+//  print_r($results);
+//
+//  $columns_count = $results->columnCount();
+////  for ($x = 0; $x <= 10; $x++) {
+////    echo "The number is: $x <br>";
+////  }
+//  for ($i = 0; $i < $columns_count; $i++) {
+//    
+//  }
+//  print_r($results->columnCount());
+//  foreach ($all as $item){
+//    print_r("1");
+//  }
+//  $stmt = $conn2->prepare($queryString);
+//  print_r($stmt);
+//  die();
+  echo "<pre>";
+//  $executed = $asd->execute();
+//  $fetched = $asd->fetchObject();
+//  var_dump($results);
+//  print_r($all3);
+//  print_r($executed);
+//  $fetched
   die();
-  
-  dpm($asd);
-  
+//echo"<pre>";
+//  print_r($query->select('creature'));
+//  $asd = $query->exec('SELECT * FROM `creature`');
+//  print_r($asd->rowCount());
+//  die();
+//  dpm($asd->rowCount());
 //  $asd->query("SELECT * FROM `wowcms` ");
 //  $asd->execute();
 //  
