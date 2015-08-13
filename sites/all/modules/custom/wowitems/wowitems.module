@@ -1,0 +1,139 @@
+<?php
+
+/**
+ * @file
+ * Provides functions and callbacks for managing a global word list, for example
+ * for managing blacklisted words.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function wowitems_menu() {
+  $items['admin/wowitems'] = array(
+    'title' => 'WoW Items',
+    'description' => 'wowitems description',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('wowitems_page'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer_site_configuration'),
+    'menu_name' => 'management',
+  );
+  return $items;
+}
+
+/**
+ * Builds the form for configuring the Word list.
+ */
+function wowitems_page() {
+
+//  db_close();
+//  db_select('wowcms');
+//  Database::closeConnection('default');
+//  Database::closeConnection('wowdrupal');
+//  $asd = Database::getConnection('default', 'wowcms');
+
+  $conn2 = Database::getConnection('wowcms', 'wowcms');
+  
+  $conn2->query($query);
+  
+  
+echo"<pre>";
+  print_r($query->select('creature'));
+  
+  
+  
+  $asd = $query->exec('SELECT * FROM `creature`');
+  
+  print_r($asd);
+  die();
+  
+  dpm($asd);
+  
+//  $asd->query("SELECT * FROM `wowcms` ");
+//  $asd->execute();
+//  
+//  
+//  $newcon = Database::getConnection('wowcms');
+//  db_set_active('wowcms');
+//   $asd = db_select('wowcms');
+//  $bla = $asd->co;
+//  dpm($bla);
+//  
+//  $form['wowitems_words'] = array(
+//    '#type' => 'textarea',
+//    '#title' => t('Words to include in the list'),
+//    '#description' => t('The words included in this list will be availlable to Rules and other modules making use of the global "site" entity.'),
+//    '#default_value' => implode("\r\n", variable_get('wowitems_words', array())),
+//  );
+//
+//  $form['submit'] = array(
+//    '#type' => 'submit',
+//    '#value' => t('Save'),
+//  );
+//
+//  
+//  
+////  dpm($newcon->getConnectionOptions());
+//
+//
+//
+//  return $form;
+}
+
+/**
+ * Submit function for the wordlist configuration page.
+ */
+function wowitems_page_submit($form, $form_state) {
+//  //Break up the list of words by line breaks.
+//  $words = explode("\r\n", $form_state['input']['wordlist_words']);
+//  wordlist_save_list($words);
+//  drupal_set_message(t('The words have been saved!'));
+//  dpm($words);
+}
+
+/**
+ * Stores the globally accesible Word list words.
+ * @param $words
+ *  An array containing the words that should be stored.
+ */
+function wowitems_save_list(array $words) {
+//  $removed = 0;
+//  foreach ($words as $key => $value) {
+//    if (strlen($value) == 0) {
+//      unset($words[$key]);
+//      $removed++;
+//    }
+//  }
+//  //If any strings were removed , notify the user.
+//  if ($removed > 0) {
+//    drupal_set_message(t(
+//            'Removed @number empty words.', array('@number' => $removed))
+//    );
+//  }
+//  // Store the words in the variables table.
+//  variable_set('wowitems_words', $words);
+}
+
+/**
+ * Fetches the list of words as defined by Wordlist Module.
+ * @return 
+ *  An array of words not sanitized.
+ */
+function wowitems_get_list() {
+//  return variable_get('wowitems_words', array());
+}
+
+/**
+ * Implements hook_entity_property_info_alter(). 
+ * @param type $info
+ */
+function wowitems_entity_property_info_alter(&$info) {
+//  $info['site']['properties']['wowitems_words'] = array(
+//    'label' => t('Wowitems list'),
+//    'description' => t('A list of words as defined by the Wowitems list module'),
+//    'getter callback' => 'wowitems_get_list',
+//    'sanitize' => 'check_plain',
+//    'type' => 'list<text>',
+//  );
+}

@@ -1,0 +1,5 @@
+name = WoW Items
+description = WoW Items List
+core = 7.x
+package = Experimental
+dependencies[] = entity
