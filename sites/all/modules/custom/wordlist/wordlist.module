@@ -19,7 +19,6 @@ function wordlist_menu() {
     'access arguments' => array('administer_site_configuration'),
     'menu_name' => 'management',
   );
-
   return $items;
 }
 
@@ -38,8 +37,6 @@ function wordlist_page() {
     '#type' => 'submit',
     '#value' => t('Save'),
   );
-
-
   return $form;
 }
 
@@ -75,4 +72,27 @@ function wordlist_save_list(array $words) {
   }
   // Store the words in the variables table.
   variable_set('wordlist_words', $words);
+}
+
+/**
+ * Fetches the list of words as defined by Wordlist Module.
+ * @return 
+ *  An array of words not sanitized.
+ */
+function wordlist_get_list() {
+  return variable_get('wordlist_words', array());
+}
+
+/**
+ * Implements hook_entity_property_info_alter(). 
+ * @param type $info
+ */
+function wordlist_entity_property_info_alter(&$info) {
+  $info['site']['properties']['wordlist_words'] = array(
+    'label' => t('Word list'),
+    'description' => t('A list of words as defined by the Wordlist module'),
+    'getter callback' => 'wordlist_get_list',
+    'sanitize' => 'check_plain',
+    'type' => 'list<text>',
+  );
 }
