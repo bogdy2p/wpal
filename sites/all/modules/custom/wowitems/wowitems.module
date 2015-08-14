@@ -27,6 +27,7 @@ function wowitems_menu() {
  */
 function wowitems_page() {
 
+ 
 
   $accountColumns = [
     "id",

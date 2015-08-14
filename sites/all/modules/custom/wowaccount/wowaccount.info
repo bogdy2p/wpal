@@ -1,0 +1,5 @@
+name = WoW Account
+description = A module that provides a hook for creating a game account when creating a new drulpal account.
+core = 7.x
+package = WoW
+dependencies[] = entity

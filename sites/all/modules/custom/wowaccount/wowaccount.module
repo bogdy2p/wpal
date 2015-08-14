@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Provides SOMETHING
+ */
+
+
+
+function wowaccount_user_insert(&$edit, $account, $category) {
+  
+  
+  db_set_active('auth');
+  
+  
+  
+  db_insert('account')->fields(array(
+    'username' => $account->name,
+    'email' => $account->mail,
+  ))->execute();
+  
+  
+  die('DEAD');
+  
+  
+  
+  db_set_active('default');
+  
+  
+}
