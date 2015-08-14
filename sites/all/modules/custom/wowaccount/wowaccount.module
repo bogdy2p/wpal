@@ -4,27 +4,63 @@
  * @file
  * Provides SOMETHING
  */
-
-
-
 function wowaccount_user_insert(&$edit, $account, $category) {
-  
-  
+
+
   db_set_active('auth');
-  
-  
-  
-  db_insert('account')->fields(array(
-    'username' => $account->name,
-    'email' => $account->mail,
-  ))->execute();
-  
-  
-  die('DEAD');
-  
-  
-  
+
+
+  dpm($account);
+
+
+//  echo "<pre>";
+//deci
+//  var_dump($account);
+//
+//  echo "<br>";
+//  var_dump($category);
+//  die();
+//  db_insert('account')->fields(array(
+//    'username' => $account->name,
+//    'email' => $account->mail,
+//  ))->execute();
+//  die('DEAD');
+
+
+
   db_set_active('default');
-  
-  
+}
+
+function wowaccount_form_alter(&$form, &$form_state, $form_id) {
+//  print_r($form_id);
+  if ($form_id == 'user_register_form') {
+//    $asd = drupal_get_form($form);
+//    print_r($_POST);
+//    echo "<pre>";
+    $form['#validate'][] = 'wowaccount_custom_validation';
+    $form['#validate'][] = 'wowaccount_custom_validation2';
+//    dpm($form['#validate']);
+//    die('good');
+//    dpm($account);
+//    $form['#submit'][] = 'customsubmit_pbc';
+//        $form['#validate'][] = 'wowaccount_custom_validation';
+//    print_r($form);
+//  db_insert('account')->fields(array(
+//    'username' => $account->name,
+//    'email' => $account->mail,
+//  ))->execute();
+//  die('DEAD');
+  }
+}
+
+function wowaccount_custom_validation() {
+  print_r("This is from custom validation !");
+//  print_r($_POST);
+//  die();
+}
+
+function wowaccount_custom_validation2() {
+  print_r("This is from SECOND custom validation !");
+  print_r($_POST);
+  die();
 }
