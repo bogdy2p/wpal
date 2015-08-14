@@ -11,7 +11,7 @@
  */
 function wowitems_menu() {
   $items['admin/wowitems'] = array(
-    'title' => 'WoW Items',
+    'title' => 'WoW Accounts From DB',
     'description' => 'wowitems description',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('wowitems_page'),
@@ -27,26 +27,73 @@ function wowitems_menu() {
  */
 function wowitems_page() {
 
-  $sql = "SELECT * FROM `command`";
+
+  $accountColumns = [
+    "id",
+    "username",
+    "sha_pass_hash",
+    "sessionkey",
+    "v",
+    "s",
+    "token_key",
+    "email",
+    "reg_mail",
+    "joindate",
+    "last_ip",
+    "last_attempt_ip",
+    "failed_logins",
+    "locked",
+    "lock_country",
+    "last_login",
+    "online",
+    "expansion",
+    "mutetime",
+    "mutereason",
+    "muteby",
+    "locale",
+    "os",
+    "recruiter",
+  ];
+
+
+
+  $sql = "SELECT * FROM `account`";
   // Switch to the external DB
-  db_set_active('world');
+  db_set_active('auth');
 // Get some data. The same rules about accessing the API functions apply here.
   $results = db_query($sql);
   echo '<div class="tablewow">';
   echo '<table class="wowstuff">';
-  echo '<h3> WoW Commands </h3>';
+  echo '<h3> WoW Accounts </h3>';
+  echo '<tr>';
+  foreach ($accountColumns as $columnName) {
+    echo'<td>';
+    echo $columnName;
+    echo'</td>';
+  }
+  echo '</tr>';
   foreach ($results as $result) {
     echo '<tr>';
-    echo'<td>';
-    echo $result->name;
-    echo'</td>';
-    echo'<td>';
-    echo $result->permission;
-    echo'</td>';
-    echo'<td>';
-    echo $result->help;
-    echo'</td>';
-    echo '</tr>';
+
+    foreach ($accountColumns as $columnName) {
+      echo'<td>';
+      echo $result->$columnName;
+      echo'</td>';
+    }
+
+//    echo'<td>';
+//    echo $result->id;
+//    echo'</td>';
+//    echo'<td>';
+//    echo $result->username;
+//    echo'</td>';
+//    echo'<td>';
+//    echo $result->email;
+//    echo'</td>';
+//    echo'<td>';
+//    echo $result->joindate;
+//    echo'</td>';
+//    echo '</tr>';
   }
 
   echo '</table>';
