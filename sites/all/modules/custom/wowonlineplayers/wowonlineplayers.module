@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * @file
+ * Module that displays a table of characters with their data
+ * for the current logged in account.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function wowonlineplayers_menu() {
+  $items['account/wowonlineplayers'] = array(
+    'title' => 'Online Players',
+    'description' => 'wowitems description',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('wowonlineplayers_page'),
+    'access callback' => TRUE,
+    'access arguments' => array('access content'),
+    'menu_name' => 'main-menu',
+  );
+  return $items;
+}
+
+/**
+ * 
+ */
+function get_current_online_players() {
+  db_set_active('characters');
+
+  $result = db_query('SELECT * FROM `characters` WHERE online = TRUE');
+  $online_players = $result->fetchAll();
+  db_set_active('default');
+  return $online_players;
+}
+
+/**
+ * Buil ......................................
+ */
+function wowonlineplayers_page() {
+  $online_players_table_columns = [
+    'name', 'race', 'class','zone'
+  ];
+  $online_players = get_current_online_players();
+  echo '<div class="online_players_table">';
+  echo '<table class="wowstuff">';
+  echo '<h3> Online Players </h3>';
+  echo '<tr>';
+  foreach ($online_players_table_columns as $columnName) {
+    echo'<td>';
+    echo $columnName;
+    echo'</td>';
+  }
+  echo '</tr>';
+  if (count($online_players) > 0) {
+    foreach ($online_players as $result) {
+      echo '<tr>';
+      foreach ($online_players_table_columns as $columnName) {
+        echo'<td>';
+        echo $result->$columnName;
+        echo'</td>';
+      }
+    }
+  }
+  echo '</table>';
+  echo '</div>';
+
+}

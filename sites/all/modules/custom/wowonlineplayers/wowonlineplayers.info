@@ -1,0 +1,5 @@
+name = WoW Online Players
+description = A module that displays the characters of the current logged in account.
+core = 7.x
+package = WoW
+dependencies[] = entity

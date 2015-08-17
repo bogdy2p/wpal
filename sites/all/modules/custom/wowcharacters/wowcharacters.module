@@ -10,32 +10,65 @@
  * Implements hook_menu().
  */
 function wowcharacters_menu() {
-  $items['admin/mychars'] = array(
-    'title' => 'WoW Characters For Current Logged In',
+  $items['account/mychars'] = array(
+    'title' => 'My Characters',
     'description' => 'wowitems description',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('wowcharacters_page'),
-    'access callback' => 'user_access',
-    'access arguments' => array('administer_site_configuration'),
-    'menu_name' => 'management',
+    'access callback' => 'user_is_logged_in',
+    'access arguments' => array('access content'),
+    'menu_name' => 'main-menu',
   );
   return $items;
 }
 
-
-
+/**
+ * Helper function / Return the current logged in user username.
+ * @global type $user
+ * @return type
+ */
+function get_logged_in_username() {
+  global $user;
+  return $user->name;
+}
 
 /**
- * Builds the form for configuring the Word list.
+ * Returns the wow account for the specified username
+ * @param type $username
+ */
+function get_wow_account_for_username($username) {
+
+  db_set_active('auth');
+  $result = db_query('SELECT * FROM `account`  WHERE username = :username', array(':username' => $username));
+  db_set_active('default');
+  if ($result) {
+    return $result->fetchObject();
+  }
+  return null;
+}
+
+function get_wow_characters_for_account($account) {
+
+  if ($account) {
+    db_set_active('characters');
+    $result = db_query('SELECT * FROM `characters` WHERE account =:account', array(':account' => $account->id));
+    db_set_active('default');
+
+
+    return $result->fetchAll();
+  } 
+  return null;
+}
+
+/**
+ * Buil ......................................
  */
 function wowcharacters_page() {
 
-  
-  
-  
-  
-  
-  
+  $username = get_logged_in_username();
+  $account = get_wow_account_for_username($username);
+  $characters = get_wow_characters_for_account($account);
+
   $all_character_table_columns = [
     'guid', 'account', 'name', 'race', 'class', 'gender', 'level', 'xp', 'money', 'playerBytes', 'playerBytes2',
     'playerFlags', 'position_x', 'position_y', 'position_z', 'map', 'instance_id', 'instance_mode_mask',
@@ -49,48 +82,31 @@ function wowcharacters_page() {
     'exploredZones', 'equipmentCache', 'ammoId', 'knownTitles', 'actionBars',
     'grantableLevels', 'deleteInfos_Account', 'deleteInfos_Name', 'deleteDate',
   ];
-
   $character_table_columns = [
-    'guid', 'account', 'name', 'race', 'class', 'gender', 'level', 'xp', 'money',
-//    'playerBytes', 'playerBytes2',
-    'playerFlags',
-//    'position_x', 'position_y', 'position_z', 'map',
+//    'guid', 'account', 
+    'name', 'race', 'class', 
+//    'gender', 
+    'level', 
+//    'xp', 'money',
+//    'playerFlags',
     'instance_id',
-//    'instance_mode_mask',
-    'orientation', 
-//    'taximask',
+//    'orientation',
     'online',
-//    'cinematic', 
-//    'totaltime', 
-//    'leveltime', 
-//    'logout_time',
-//    'is_logout_resting', 'rest_bonus', 'resettalents_cost', 'resettalents_time', 'trans_x',
-//    'trans_y', 'trans_z', 'trans_o',
-//    'transguid', 'extra_flags', 
-//    'stable_slots', 
-//    'at_login',
     'zone', 'death_expire_time',
-    'taxi_path', 
+    'taxi_path',
     'arenaPoints',
     'totalHonorPoints',
     'todayHonorPoints',
     'yesterdayHonorPoints', 'totalKills',
     'todayKills', 'yesterdayKills', 'chosenTitle',
-    'knownCurrencies', 
-//    'watchedFaction',
-//    'drunk',
+    'knownCurrencies',
     'health', 'power1', 'power2', 'power3',
     'power4', 'power5', 'power6', 'power7', 'latency',
     'talentGroupsCount',
     'activeTalentGroup',
-//    'exploredZones', 'equipmentCache', 'ammoId', 'knownTitles', 'actionBars',
-//    'grantableLevels', 'deleteInfos_Account', 'deleteInfos_Name', 'deleteDate',
   ];
 
-  
-  $sql = "SELECT * FROM `characters`";
   db_set_active('characters');
-  $results = db_query($sql);
   echo '<div class="tablewow">';
   echo '<table class="wowstuff">';
   echo '<h3> WoW Accounts </h3>';
@@ -101,12 +117,14 @@ function wowcharacters_page() {
     echo'</td>';
   }
   echo '</tr>';
-  foreach ($results as $result) {
-    echo '<tr>';
-    foreach ($character_table_columns as $columnName) {
-      echo'<td>';
-      echo $result->$columnName;
-      echo'</td>';
+  if (count($characters) > 0) {
+    foreach ($characters as $result) {
+      echo '<tr>';
+      foreach ($character_table_columns as $columnName) {
+        echo'<td>';
+        echo $result->$columnName;
+        echo'</td>';
+      }
     }
   }
   echo '</table>';
