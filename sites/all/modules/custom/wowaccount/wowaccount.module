@@ -2,43 +2,22 @@
 
 /**
  * @file
- * Provides SOMETHING
+ * Module that alters the drupal registration form in order to create a similar
+ * account within the trinity database using the same credentials from the drupal
+ * site.
  */
-function wowaccount_user_insert(&$edit, $account, $category) {
-
-
-  db_set_active('auth');
-
-
-  dpm($account);
-
-
-//  echo "<pre>";
-//deci
-//  var_dump($account);
-//
-//  echo "<br>";
-//  var_dump($category);
-//  die();
-//  db_insert('account')->fields(array(
-//    'username' => $account->name,
-//    'email' => $account->mail,
-//  ))->execute();
-//  die('DEAD');
-
-
-
-  db_set_active('default');
-}
 
 function wowaccount_form_alter(&$form, &$form_state, $form_id) {
 //  print_r($form_id);
   if ($form_id == 'user_register_form') {
     $form['#validate'][] = 'wowaccount_account_create';
-//    $form['#validate'][] = 'wowaccount_custom_validation2';
   }
 }
 
+/**
+ * Function that actually creates the server account using the POST data of the 
+ * submitted form.
+ */
 function wowaccount_account_create() {
 
 //  Inside here we should create the new account for the user on the wow database

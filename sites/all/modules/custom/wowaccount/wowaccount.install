@@ -10,5 +10,5 @@
  * Remove the wordlist variables from the database if they exist.
  */
 function wowaccount_uninstall() {
-//  variable_del('wordlist_words');
+  //Do nothing
 }
