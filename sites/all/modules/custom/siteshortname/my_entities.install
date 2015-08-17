@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file 
+ * Functions that are called on install or uninstall. Actually only @ uninstall
+ * in this case.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function siteshortname_entities_remote_schema() {
+  $schema = array(
+    'siteshortname_entities_remote_events' => remote_entity_schema_table('our remote event entity type'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Entity controller extending RemoteEntityAPIDefaultController
+ *
+ * For most of our cases the default controller is fine, but we can use
+ * this one for entities we don't want stored locally.  Override the save
+ * behaviour and do not keep a local cached copy.
+ */
+class SiteshortnameEntitiesRemoteNoLocalAPIController extends RemoteEntityAPIDefaultController {
+
+  /**
+   * Don't actually save anything.
+   */
+  public function save($entity, DatabaseTransaction $transaction = NULL) {
+    $entity->eid = uniqid();
+  }
+}

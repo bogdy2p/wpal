@@ -1,0 +1,5 @@
+name = WoW Remote
+description = A TEST
+core = 7.x
+package = WoW
+dependencies[] = entity

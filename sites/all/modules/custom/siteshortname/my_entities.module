@@ -1,0 +1,271 @@
+<?php
+
+/**
+ * @file
+ * WOW REMOTE TEST
+ */
+/* * **************************************************************************
+ * * Entity APIs
+ * ************************************************************************** */
+
+/**
+ * Implements hook_entity_info().
+ *
+ * @todo Add 'bundles' for different types of remote content.
+ * @todo Add 'entity keys' => 'needs remote save' if remote saving required.
+ * @todo Remove 'static cache' and 'field cache' settings after development.
+ */
+function siteshortname_entities_remote_entity_info() {
+
+  class SiteshortnameEvent extends Entity {
+
+    /**
+     * Override defaultUri().
+     */
+    protected function defaultUri() {
+      return array('path' => 'event/' . $this->remote_id);
+    }
+
+  }
+
+  $entities['siteshortname_entities_remote_event'] = array(
+    // Core properties.
+    'label' => t('Event'),
+    'controller class' => 'RemoteEntityAPIDefaultController',
+    'base table' => 'siteshortname_entities_remote_events',
+    'uri callback' => 'entity_class_uri',
+    'label callback' => 'remote_entity_entity_label',
+    'fieldable' => FALSE,
+    'entity keys' => array(
+      'id' => 'eid',
+      'label' => 'event_name',
+    ),
+    'view modes' => array(
+      'full' => array(
+        'label' => t('Full content'),
+        'custom settings' => FALSE,
+      ),
+    ),
+    'static cache' => FALSE,
+    'field cache' => FALSE,
+    // Entity API properties.
+    'entity class' => 'WowremoteEvent',
+    'module' => 'siteshortname_entities_remote',
+    'metadata controller class' => 'RemoteEntityAPIDefaultMetadataController',
+    'views controller class' => 'EntityDefaultViewsController',
+    // Remote Entity API properties.
+    'remote base table' => 'siteshortname_entities_remote_events',
+    'remote entity keys' => array(
+      'remote id' => 'event_id',
+      'label' => 'event_name',
+    ),
+    'expiry' => array(
+      // Number of seconds before a locally cached instance must be refreshed
+      // from the remote source.
+      'expiry time' => 600,
+      // A boolean indicating whether or not to delete expired local entities
+      // on cron.
+      'purge' => FALSE,
+    ),
+  );
+
+  // Get the property map data.
+  $remote_properties = siteshortname_entities_remote_get_remote_properties();
+
+  // Assign each map to its corresponding entity.
+  foreach ($entities as $key => $einfo) {
+    $entities[$key]['property map'] = drupal_map_assoc(array_keys($remote_properties[$key]));
+  }
+
+  // Return all of the entity information.
+  return $entities;
+}
+
+/**
+ * Implements hook_entity_property_info_alter().
+ *
+ * This is needed to use wrappers to access the remote entity
+ * data in the entity_data property of remote entities.
+ *
+ * @see: Page 107 of the Programming Drupal 7 Entities book.  The code below is
+ *   a variation on it.
+ * @todo: Remove whenever this gets added to the remote_entity module.
+ */
+function siteshortname_entities_remote_entity_property_info_alter(&$info) {
+
+  // Set the entity types and get their properties.
+  $entity_types = array(
+    'siteshortname_entities_remote_event',
+  );
+
+  $remote_properties = siteshortname_entities_remote_get_remote_properties();
+
+  // Assign the property data to each entity.
+  foreach ($entity_types as $entity_type) {
+    $properties = &$info[$entity_type]['properties'];
+    $entity_data = &$properties['entity_data'];
+    $pp = &$remote_properties[$entity_type];
+    $entity_data['type'] = 'remote_entity_' . $entity_type;
+
+    // Set the default getter callback for each property.
+    foreach ($pp as $key => $pinfo) {
+      $pp[$key]['getter callback'] = 'entity_property_verbatim_get';
+    }
+
+    // Assign the updated property info to the entity info.
+    $entity_data['property info'] = $pp;
+  }
+}
+
+/**
+ * Get remote property information for remote entities.
+ *
+ * @return
+ *   An array of property information keyed by entity type.
+ */
+function siteshortname_entities_remote_get_remote_properties() {
+
+  // Initialize a list of entity properties.
+  $properties = array();
+
+  // Define properties for the entity type.
+  $properties['siteshortname_entities_remote_event'] = array(
+    // Event information.
+    'event_id' => array(
+      'label' => 'Remote Event ID',
+      'type' => 'integer',
+      'description' => 'The remote attribute "id".',
+      'views' => array(
+        'filter' => 'siteshortname_entities_remote_views_handler_filter_event_id',
+      ),
+    ),
+    'event_date' => array(
+      'label' => 'Date',
+      'type' => 'date',
+      'description' => 'The remote attribute "date".',
+      'views' => array(
+        'filter' => 'siteshortname_entities_remote_views_handler_filter_event_date',
+      ),
+    ),
+    'event_details' => array(
+      'label' => 'Details',
+      'type' => 'text',
+      'description' => 'The remote attribute "details".',
+    ),
+  );
+
+  // Return all of the defined property info.
+  return $properties;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function siteshortname_entities_remote_menu() {
+  $items = array();
+
+  $items['event/%siteshortname_entities_remote_event'] = array(
+    'title' => 'Remote Event',
+    'page callback' => 'siteshortname_entities_remote_event_view',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * Menu autoloader wildcard for path 'event/REMOTE_ID'.
+ *
+ * @see hook_menu() documentation.
+ * @param $remote_id
+ *   The remote ID of the record to load.
+ * @return
+ *   The loaded object, or FALSE on failure.
+ */
+function siteshortname_entities_remote_event_load($remote_id) {
+  return remote_entity_load_by_remote_id('siteshortname_entities_remote_event', $remote_id);
+}
+
+/**
+ * Page callback for path 'event/%remote_id'.
+ *
+ * @param $event
+ *   The auto-loaded object.
+ * @return
+ *   The themed output for the event page.
+ */
+function siteshortname_entities_remote_event_view($event) {
+  $fullname = $event->name;
+  drupal_set_title($fullname);
+  $event_output = theme('siteshortname_entities_remote_event', array(
+    'event' => $event,
+  ));
+  return $event_output;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function siteshortname_entities_remote_theme() {
+  return array(
+    'siteshortname_entities_remote_event' => array(
+      'variables' => array('event' => NULL),
+      'file' => 'includes/siteshortname_entities_remote.theme.inc',
+    ),
+  );
+}
+
+/* * **************************************************************************
+ * * Web Service Clients
+ * ************************************************************************** */
+
+/**
+ * Implements hook_clients_connection_type_info().
+ */
+function siteshortname_entities_remote_clients_connection_type_info() {
+  return array(
+    'our_rest' => array(
+      'label' => t('REST Data Services'),
+      'description' => t('Connects to our data service using REST endpoints.'),
+      'tests' => array(
+        'event_retrieve_raw' => 'SiteshortnameEntitiesRemoteConnectionTestEventRetrieveRaw',
+      ),
+      'interfaces' => array(
+        'ClientsRemoteEntityInterface',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_clients_default_connections().
+ */
+function siteshortname_entities_remote_clients_default_connections() {
+
+  $connections['my_rest_connection'] = new clients_connection_our_rest(array(
+    'endpoint' => 'https://data.example.com',
+    'configuration' => array(
+      'username' => '',
+      'password' => '',
+    ),
+    'label' => 'Our REST Service',
+    'type' => 'our_rest',
+      ), 'clients_connection');
+
+  return $connections;
+}
+
+/**
+ * Implements hook_clients_default_resources().
+ */
+function siteshortname_entities_remote_clients_default_resources() {
+  $resources['siteshortname_entities_remote_event'] = new clients_resource_remote_entity(array(
+    'component' => 'siteshortname_entities_remote_event',
+    'connection' => 'my_rest_connection',
+    'label' => 'Resource for remote events',
+    'type' => 'remote_entity',
+      ), 'clients_resource');
+
+  return $resources;
+}
