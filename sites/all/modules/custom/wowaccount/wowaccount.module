@@ -34,33 +34,38 @@ function wowaccount_user_insert(&$edit, $account, $category) {
 function wowaccount_form_alter(&$form, &$form_state, $form_id) {
 //  print_r($form_id);
   if ($form_id == 'user_register_form') {
-//    $asd = drupal_get_form($form);
-//    print_r($_POST);
-//    echo "<pre>";
-    $form['#validate'][] = 'wowaccount_custom_validation';
-    $form['#validate'][] = 'wowaccount_custom_validation2';
-//    dpm($form['#validate']);
-//    die('good');
-//    dpm($account);
-//    $form['#submit'][] = 'customsubmit_pbc';
-//        $form['#validate'][] = 'wowaccount_custom_validation';
-//    print_r($form);
-//  db_insert('account')->fields(array(
-//    'username' => $account->name,
-//    'email' => $account->mail,
-//  ))->execute();
-//  die('DEAD');
+    $form['#validate'][] = 'wowaccount_account_create';
+//    $form['#validate'][] = 'wowaccount_custom_validation2';
   }
 }
 
-function wowaccount_custom_validation() {
-  print_r("This is from custom validation !");
-//  print_r($_POST);
-//  die();
+function wowaccount_account_create() {
+
+//  Inside here we should create the new account for the user on the wow database
+  //If the password validation is successfull
+  if ($_POST['pass']['pass1'] === $_POST['pass']['pass2']) {
+    $user = strtoupper($_POST['name']);
+    $password = strtoupper($_POST['pass']['pass1']);
+
+    
+//    $sha_hash = SHA1($user . ':' . $password);
+    $sha_hash = encode_sha_password($user, $password);
+    db_set_active('auth');
+    db_insert('account')->fields(array(
+      'username' => strtoupper($_POST['name']),
+      'email' => $_POST['mail'],
+      'sha_pass_hash' => $sha_hash,
+    ))->execute();
+    db_set_active('default');
+  }
 }
 
-function wowaccount_custom_validation2() {
-  print_r("This is from SECOND custom validation !");
-  print_r($_POST);
-  die();
+/**
+ * SHA Hash is of type : (SHA(user:password)) [capitalized] in order to work with the server 
+ * @param type $account_name
+ * @param type $password
+ * @return type
+ */
+function encode_sha_password($account_name, $password) {
+  return SHA1($account_name . ':' . $password);
 }
