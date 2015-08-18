@@ -15,7 +15,8 @@ function wowcharacters_views_default_views() {
   }
   //Check that there are views in the directory
   //This keeps the site from throwing errors if there are no views to return
-  if ($views){
+  if ($views) {
     return $views;
   }
 }
+
