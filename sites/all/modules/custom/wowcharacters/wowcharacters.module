@@ -56,7 +56,7 @@ function get_wow_characters_for_account($account) {
 
 
     return $result->fetchAll();
-  } 
+  }
   return null;
 }
 
@@ -84,9 +84,9 @@ function wowcharacters_page() {
   ];
   $character_table_columns = [
 //    'guid', 'account', 
-    'name', 'race', 'class', 
+    'name', 'race', 'class',
 //    'gender', 
-    'level', 
+    'level',
 //    'xp', 'money',
 //    'playerFlags',
     'instance_id',
@@ -130,4 +130,12 @@ function wowcharacters_page() {
   echo '</table>';
   echo '</div>';
   db_set_active('default');
+}
+
+/*
+ * Implementation of hook_views_api()
+ */
+
+function wowcharacters_views_api() {
+  return array('api' => 3.0);
 }

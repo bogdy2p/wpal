@@ -32,4 +32,5 @@ class SiteshortnameEntitiesRemoteNoLocalAPIController extends RemoteEntityAPIDef
   public function save($entity, DatabaseTransaction $transaction = NULL) {
     $entity->eid = uniqid();
   }
+
 }

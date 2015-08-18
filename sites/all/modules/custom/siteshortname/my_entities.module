@@ -2,7 +2,7 @@
 
 /**
  * @file
- * WOW REMOTE TEST
+ * WOW REMOTE TEST NAME
  */
 /* * **************************************************************************
  * * Entity APIs
@@ -16,18 +16,6 @@
  * @todo Remove 'static cache' and 'field cache' settings after development.
  */
 function siteshortname_entities_remote_entity_info() {
-
-  class SiteshortnameEvent extends Entity {
-
-    /**
-     * Override defaultUri().
-     */
-    protected function defaultUri() {
-      return array('path' => 'event/' . $this->remote_id);
-    }
-
-  }
-
   $entities['siteshortname_entities_remote_event'] = array(
     // Core properties.
     'label' => t('Event'),
@@ -49,7 +37,7 @@ function siteshortname_entities_remote_entity_info() {
     'static cache' => FALSE,
     'field cache' => FALSE,
     // Entity API properties.
-    'entity class' => 'WowremoteEvent',
+    'entity class' => 'SiteshortnameEvent',
     'module' => 'siteshortname_entities_remote',
     'metadata controller class' => 'RemoteEntityAPIDefaultMetadataController',
     'views controller class' => 'EntityDefaultViewsController',
@@ -158,6 +146,10 @@ function siteshortname_entities_remote_get_remote_properties() {
   return $properties;
 }
 
+/* * **************************************************************************
+ * * Drupal Core
+ * ************************************************************************** */
+
 /**
  * Implements hook_menu().
  */
@@ -214,6 +206,17 @@ function siteshortname_entities_remote_theme() {
       'file' => 'includes/siteshortname_entities_remote.theme.inc',
     ),
   );
+}
+
+class SiteshortnameEvent extends Entity {
+
+  /**
+   * Override defaultUri().
+   */
+  protected function defaultUri() {
+    return array('path' => 'event/' . $this->remote_id);
+  }
+
 }
 
 /* * **************************************************************************
