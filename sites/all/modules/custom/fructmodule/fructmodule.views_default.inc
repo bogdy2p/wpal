@@ -20,3 +20,24 @@ function fructmodule_views_default_views() {
   }
 }
 
+/**
+ * @file
+ * Views definitions for mymodule module.
+ */
+
+/**
+ * Implements hook_views_data().
+ */
+function fructmodule_views_data() {
+  
+  $data = array();
+  $data['fruct']['handlername'] = array(
+    'title' => t('Name of my handler'),
+    'help' => t('Description of my handler.'),
+    'field' => array(
+      'handler' => 'fructmodule_handler_handlername2',
+    ),
+  );
+
+  return $data;
+}

@@ -3,3 +3,5 @@ description = A module that displays FRUCTE
 core = 7.x
 package = WoW
 dependencies[] = entity
+
+files[] = fructmodule_handler_handlername2.inc

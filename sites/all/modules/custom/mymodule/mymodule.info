@@ -1,0 +1,7 @@
+name = MYModule2
+description = A module that displays FRUCTE2
+core = 7.x
+package = WoW
+dependencies[] = ctools
+dependencies[] = entity
+files[] = mymodule_handler_handlername.inc

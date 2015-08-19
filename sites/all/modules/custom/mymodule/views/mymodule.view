@@ -1,0 +1,54 @@
+<?php
+
+// This file must be at mymodule/views directory.
+
+$view = new view();
+$view->name = 'mymodule_view';
+$view->description = 'Description of the fructe views';
+$view->tag = 'default';
+$view->base_table = 'fruct';
+$view->human_name = 'fructe view';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+ 
+/* Display: Master */
+
+
+
+
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['row_plugin'] = 'fields';
+/* Field: fructe: nume */
+$handler->display->display_options['fields']['nume']['id'] = '1';
+$handler->display->display_options['fields']['nume']['table'] = 'fruct';
+$handler->display->display_options['fields']['nume']['field'] = 'nume';
+$handler->display->display_options['fields']['nume']['label'] = 'Fructs: ';
+//$handler->display->display_options['fields']['nume']['alter']['word_boundary'] = FALSE;
+//$handler->display->display_options['fields']['nume']['alter']['ellipsis'] = FALSE;
+//$handler->display->display_options['fields']['fructe']['id'] = '2';
+//$handler->display->display_options['fields']['fructe']['database'] = 'testdb1';
+//$handler->display->display_options['fields']['fructe']['table'] = 'fructe';
+//$handler->display->display_options['fields']['fructe']['field'] = 'nume';
+//$handler->display->display_options['fields']['fructe']['label'] = 'Fructsz: ';
+//$handler->display->display_options['sorts']['nume']['id'] = 'nume';
+//$handler->display->display_options['sorts']['nume']['table'] = 'fruct';
+//$handler->display->display_options['sorts']['nume']['field'] = 'nume';
+//$handler->display->display_options['sorts']['nume']['order'] = 'DESC';
+
+///* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['path'] = 'mymodule-all';
+$handler->display->display_options['menu']['type'] = 'normal';
+$handler->display->display_options['menu']['title'] = 'All My Module';
+$handler->display->display_options['menu']['name'] = 'main-menu';
+//
+//echo"<pre>";
+//var_dump($handler);
