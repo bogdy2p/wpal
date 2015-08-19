@@ -5,7 +5,7 @@ $view = new view();
 $view->name = 'all_my_characters';
 $view->description = 'Description of the allmycharacters views';
 $view->tag = 'default';
-$view->base_table = 'characters';
+$view->base_table = 'account';
 $view->human_name = 'all_my_characters';
 $view->core = 7;
 $view->api_version = '3.0';
@@ -22,29 +22,29 @@ $handler->display->display_options['pager']['type'] = 'full';
 $handler->display->display_options['style_plugin'] = 'default';
 $handler->display->display_options['row_plugin'] = 'fields';
 /* Field: characters: name */
-$handler->display->display_options['fields']['name']['id'] = '1';
-$handler->display->display_options['fields']['name']['table'] = 'characters';
-$handler->display->display_options['fields']['name']['field'] = 'name';
-$handler->display->display_options['fields']['name']['label'] = 'charName. ';
-$handler->display->display_options['fields']['name']['alter']['word_boundary'] = FALSE;
-$handler->display->display_options['fields']['name']['alter']['ellipsis'] = FALSE;
-/* Field: characters: account */
-$handler->display->display_options['fields']['account']['id'] = '2';
-$handler->display->display_options['fields']['account']['table'] = 'characters';
-$handler->display->display_options['fields']['account']['field'] = 'account';
-$handler->display->display_options['fields']['account']['label'] = 'acctNo. ';
-$handler->display->display_options['fields']['account']['alter']['word_boundary'] = FALSE;
-$handler->display->display_options['fields']['account']['alter']['ellipsis'] = FALSE;
-/* Field: characters: username */
-$handler->display->display_options['fields']['username']['id'] = '3';
-$handler->display->display_options['fields']['username']['table'] = 'characters';
+$handler->display->display_options['fields']['username']['id'] = '1';
+$handler->display->display_options['fields']['username']['table'] = 'account';
 $handler->display->display_options['fields']['username']['field'] = 'username';
-$handler->display->display_options['fields']['username']['label'] = 'Account Username:  ';
+$handler->display->display_options['fields']['username']['label'] = 'Account: ';
 $handler->display->display_options['fields']['username']['alter']['word_boundary'] = FALSE;
 $handler->display->display_options['fields']['username']['alter']['ellipsis'] = FALSE;
+/* Field: characters: account */
+//$handler->display->display_options['fields']['account']['id'] = '2';
+//$handler->display->display_options['fields']['account']['table'] = 'characters';
+//$handler->display->display_options['fields']['account']['field'] = 'account';
+//$handler->display->display_options['fields']['account']['label'] = 'acctNo. ';
+//$handler->display->display_options['fields']['account']['alter']['word_boundary'] = FALSE;
+//$handler->display->display_options['fields']['account']['alter']['ellipsis'] = FALSE;
+/* Field: characters: username */
+//$handler->display->display_options['fields']['username']['id'] = '3';
+//$handler->display->display_options['fields']['username']['table'] = 'characters';
+//$handler->display->display_options['fields']['username']['field'] = 'username';
+//$handler->display->display_options['fields']['username']['label'] = 'Account Username:  ';
+//$handler->display->display_options['fields']['username']['alter']['word_boundary'] = FALSE;
+//$handler->display->display_options['fields']['username']['alter']['ellipsis'] = FALSE;
 /* Sort criterion: characters: name */
 $handler->display->display_options['sorts']['name']['id'] = 'name';
-$handler->display->display_options['sorts']['name']['table'] = 'characters';
+$handler->display->display_options['sorts']['name']['table'] = 'account';
 $handler->display->display_options['sorts']['name']['field'] = 'name';
 $handler->display->display_options['sorts']['name']['order'] = 'DESC';
 ///* Filter criterion: Content: Published */

@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file 
+ * Functions that are called on install or uninstall. Actually only @ uninstall
+ * in this case.
+ */
+
+/**
+ * Remove the wordlist variables from the database if they exist.
+ */
+function fructmodule_uninstall() {
+  //Do nothing
+}

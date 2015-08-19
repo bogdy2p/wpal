@@ -1,0 +1,5 @@
+name = Fructe Module
+description = A module that displays FRUCTE
+core = 7.x
+package = WoW
+dependencies[] = entity

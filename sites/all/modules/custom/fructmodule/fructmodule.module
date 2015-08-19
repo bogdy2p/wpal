@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * @file
+ * Module that displays a table of characters with their data
+ * for the current logged in account.
+ */
+
+/*
+ * Implementation of hook_views_api()
+ */
+
+function fructmodule_views_api() {
+  return array('api' => 3.0);
+}
+
+/*
+ * Implements hook_views_data_alter.
+ */
+
+function fructmodule_views_data_alter(&$data) {
+
+  //one fructe can have many fruct ( One-To-Many Relationship)
+  
+
+  $data['fruct']['table']['group'] = t('Fruct');   // Advertise this table as a possible base table 
+  $data['fruct']['table']['base'] = array(
+    'field' => 'id',
+    'title' => t('Fruct'),
+    'weight' => -10,
+    'access query tag' => 'node_access',
+    'database' => 'testdb2',
+    'defaults' => array(
+      'field' => 'nume',
+    ),
+  );
+////// For other base tables, explain how we join 
+  $data['fructe']['table']['join'] = array(
+    // this explains how the 'node' table (named in the line above) 
+    // links toward the node_revision table.
+//    'database' => 'testdb1',
+    'fruct' => array(
+      'database' => 'testdb1',
+      'handler' => 'views_join',
+      
+      // this is actually optional 
+//      'left_table' => 'fructe',
+// Because this is a direct link it could be left out.
+      'left_field' => 'tip',
+      'field' => 'id',
+
+    ),
+  );
+  
+  $data ['fruct']['table']['default_relationship'] = array(
+    'fruct' => array(
+      'database' => 'testdb1',
+      'table' => 'fruct',
+      'field' => 'id',
+    ),
+  );
+  
+//
+//
+//  // ---------------------------------------------------------------- 
+//// node table -- fields // title 
+//// This definition has more items in it than it needs to as an example. 
+  $data['fructe']['nume'] = array(
+    'title' => t('Nume'), // The item it appears as on the UI, 
+    'help' => t('The fructe name.'), // The help that appears on the UI, 
+// Information for displaying a title as a field
+    'field' => array(
+      'field' => 'nume', //   the real field. This could be left out since it is the same. 
+      'group' => t('Fructe'), // The group it appears in on the UI. Could be left out.
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+//      'link_to_node default' => TRUE,
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+// Information for accepting a title as a filter 
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_string',
+    ),
+  );
+
+
+//  dpm($data['fruct']);
+//  dpm($data['fructe']);
+}
+
+
