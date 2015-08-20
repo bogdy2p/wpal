@@ -30,43 +30,57 @@ function fructmodule_views_data_alter(&$data) {
       'field' => 'fruct',
     ),
   );
-
-//  $data['fructe']['table']['base'] = array(
-//    'field' => 'id',
-//    'title' => t('Fructe'),
-//    'weight' => -10,
-//    'access query tag' => 'node_access',
-//    'database' => 'testdb1',
-//    'defaults' => array(
-//      'field' => 'tip_fruct',
-//    ),
-//  );
-
-
+//
+//  echo "<pre>";
+//  print_r($data['fruct']);
+//  die();
 ////// For other base tables, explain how we join 
   $data['fructe']['table']['join'] = array(
     // this explains how the 'node' table (named in the line above) 
     // links toward the node_revision table.
-    'database' => 'testdb1',
+//    'database' => 'testdb1',
+
     'fruct' => array(
-////      'database' => 'testdb1',
-      'handler' => 'fructmodule_handler_handlername2',
-//      // this is actually optional 
-//      'left_table' => 'fruct',
-//// Because this is a direct link it could be left out.
-//      'left_field' => 'tip_fruct',
-//      'field' => 'id',
+      'database' => 'testdb1',
+      'left_table' => 'testdb1.fruct',
+      'left_field' => 'tip_fruct',
+      'field' => 'tip',
     ),
+    
+    
   );
 
-  $data ['fruct']['table']['default_relationship'] = array(
-    'fruct' => array(
-      'database' => 'testdb2',
-      'table' => 'fruct',
-      'field' => 'id',
-    ),
-  );
+//  $data ['fructe']['table']['default_relationship'] = array(
+//    'fruct' => array(
+//      'database' => 'testdb1',
+//      'table' => 'fruct',
+//      'field' => 'id',
+//    ),
+//  );
 //
 //
 //  dpm($data['fructe']);
 }
+
+
+function fructmodule_views_query_alter(&$view, &$query) {
+//  dpm($view);
+//  dpm($query);
+    $join = new views_join();
+    $join->table = 'testdb1.fructe';
+    $join->field = 'id';
+    $join->left_table = 'fruct';
+    $join->left_field = 'tip_fruct';
+    $join->type = 'left';
+//    $join->extra = array(
+//        array(
+//            'field' => 'bundle',
+//            'value' => 'user',
+//        )
+//    );
+    $query->add_relationship('fructe', $join, 'node');
+  
+    dpm($query);
+    dpm($join);
+}
+?>
