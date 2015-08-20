@@ -1,0 +1,80 @@
+<?php
+
+$view = new view();
+$view->name = 'individualcharacter';
+$view->description = '';
+$view->tag = 'default';
+$view->base_table = 'characters';
+$view->human_name = 'IndividualCharacter';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Character View';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'none';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['pager']['options']['items_per_page'] = '10';
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['row_plugin'] = 'fields';
+/* Field: characters: guid */
+$handler->display->display_options['fields']['guid']['id'] = 'guid';
+$handler->display->display_options['fields']['guid']['table'] = 'characters';
+$handler->display->display_options['fields']['guid']['field'] = 'guid';
+$handler->display->display_options['fields']['guid']['label'] = '';
+$handler->display->display_options['fields']['guid']['exclude'] = TRUE;
+$handler->display->display_options['fields']['guid']['alter']['trim_whitespace'] = TRUE;
+$handler->display->display_options['fields']['guid']['element_label_colon'] = FALSE;
+/* Field: characters: name */
+$handler->display->display_options['fields']['name']['id'] = 'name';
+$handler->display->display_options['fields']['name']['table'] = 'characters';
+$handler->display->display_options['fields']['name']['field'] = 'name';
+/* Field: characters: class */
+$handler->display->display_options['fields']['class']['id'] = 'class';
+$handler->display->display_options['fields']['class']['table'] = 'characters';
+$handler->display->display_options['fields']['class']['field'] = 'class';
+/* Field: characters: health */
+$handler->display->display_options['fields']['health']['id'] = 'health';
+$handler->display->display_options['fields']['health']['table'] = 'characters';
+$handler->display->display_options['fields']['health']['field'] = 'health';
+/* Field: characters: arenaPoints */
+$handler->display->display_options['fields']['arenaPoints']['id'] = 'arenaPoints';
+$handler->display->display_options['fields']['arenaPoints']['table'] = 'characters';
+$handler->display->display_options['fields']['arenaPoints']['field'] = 'arenaPoints';
+/* Field: characters: level */
+$handler->display->display_options['fields']['level']['id'] = 'level';
+$handler->display->display_options['fields']['level']['table'] = 'characters';
+$handler->display->display_options['fields']['level']['field'] = 'level';
+/* Field: characters: zone */
+$handler->display->display_options['fields']['zone']['id'] = 'zone';
+$handler->display->display_options['fields']['zone']['table'] = 'characters';
+$handler->display->display_options['fields']['zone']['field'] = 'zone';
+/* Field: characters: gender */
+$handler->display->display_options['fields']['gender']['id'] = 'gender';
+$handler->display->display_options['fields']['gender']['table'] = 'characters';
+$handler->display->display_options['fields']['gender']['field'] = 'gender';
+/* Field: characters: map */
+$handler->display->display_options['fields']['map']['id'] = 'map';
+$handler->display->display_options['fields']['map']['table'] = 'characters';
+$handler->display->display_options['fields']['map']['field'] = 'map';
+/* Field: characters: online */
+$handler->display->display_options['fields']['online']['id'] = 'online';
+$handler->display->display_options['fields']['online']['table'] = 'characters';
+$handler->display->display_options['fields']['online']['field'] = 'online';
+/* Contextual filter: characters: guid */
+$handler->display->display_options['arguments']['guid']['id'] = 'guid';
+$handler->display->display_options['arguments']['guid']['table'] = 'characters';
+$handler->display->display_options['arguments']['guid']['field'] = 'guid';
+$handler->display->display_options['arguments']['guid']['default_argument_type'] = 'fixed';
+$handler->display->display_options['arguments']['guid']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['guid']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['guid']['summary_options']['items_per_page'] = '25';
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['path'] = 'character';
