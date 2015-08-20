@@ -1,5 +1,4 @@
 <?php
-
 $view = new view();
 $view->name = 'individualcharacter';
 $view->description = '';
@@ -34,38 +33,141 @@ $handler->display->display_options['fields']['guid']['element_label_colon'] = FA
 $handler->display->display_options['fields']['name']['id'] = 'name';
 $handler->display->display_options['fields']['name']['table'] = 'characters';
 $handler->display->display_options['fields']['name']['field'] = 'name';
+$handler->display->display_options['fields']['name']['label'] = '';
+$handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
 /* Field: characters: class */
 $handler->display->display_options['fields']['class']['id'] = 'class';
 $handler->display->display_options['fields']['class']['table'] = 'characters';
 $handler->display->display_options['fields']['class']['field'] = 'class';
-/* Field: characters: health */
-$handler->display->display_options['fields']['health']['id'] = 'health';
-$handler->display->display_options['fields']['health']['table'] = 'characters';
-$handler->display->display_options['fields']['health']['field'] = 'health';
+$handler->display->display_options['fields']['class']['label'] = '';
+$handler->display->display_options['fields']['class']['exclude'] = TRUE;
+$handler->display->display_options['fields']['class']['element_label_colon'] = FALSE;
+/* Field: characters: race */
+$handler->display->display_options['fields']['race']['id'] = 'race';
+$handler->display->display_options['fields']['race']['table'] = 'characters';
+$handler->display->display_options['fields']['race']['field'] = 'race';
+$handler->display->display_options['fields']['race']['label'] = '';
+$handler->display->display_options['fields']['race']['exclude'] = TRUE;
+$handler->display->display_options['fields']['race']['element_label_colon'] = FALSE;
 /* Field: characters: arenaPoints */
 $handler->display->display_options['fields']['arenaPoints']['id'] = 'arenaPoints';
 $handler->display->display_options['fields']['arenaPoints']['table'] = 'characters';
 $handler->display->display_options['fields']['arenaPoints']['field'] = 'arenaPoints';
+$handler->display->display_options['fields']['arenaPoints']['label'] = '';
+$handler->display->display_options['fields']['arenaPoints']['exclude'] = TRUE;
+$handler->display->display_options['fields']['arenaPoints']['element_label_colon'] = FALSE;
 /* Field: characters: level */
 $handler->display->display_options['fields']['level']['id'] = 'level';
 $handler->display->display_options['fields']['level']['table'] = 'characters';
 $handler->display->display_options['fields']['level']['field'] = 'level';
+$handler->display->display_options['fields']['level']['label'] = '';
+$handler->display->display_options['fields']['level']['exclude'] = TRUE;
+$handler->display->display_options['fields']['level']['element_label_colon'] = FALSE;
 /* Field: characters: zone */
 $handler->display->display_options['fields']['zone']['id'] = 'zone';
 $handler->display->display_options['fields']['zone']['table'] = 'characters';
 $handler->display->display_options['fields']['zone']['field'] = 'zone';
+$handler->display->display_options['fields']['zone']['label'] = '';
+$handler->display->display_options['fields']['zone']['exclude'] = TRUE;
+$handler->display->display_options['fields']['zone']['element_label_colon'] = FALSE;
 /* Field: characters: gender */
 $handler->display->display_options['fields']['gender']['id'] = 'gender';
 $handler->display->display_options['fields']['gender']['table'] = 'characters';
 $handler->display->display_options['fields']['gender']['field'] = 'gender';
+$handler->display->display_options['fields']['gender']['label'] = '';
+$handler->display->display_options['fields']['gender']['exclude'] = TRUE;
+$handler->display->display_options['fields']['gender']['element_label_colon'] = FALSE;
 /* Field: characters: map */
 $handler->display->display_options['fields']['map']['id'] = 'map';
 $handler->display->display_options['fields']['map']['table'] = 'characters';
 $handler->display->display_options['fields']['map']['field'] = 'map';
+$handler->display->display_options['fields']['map']['label'] = '';
+$handler->display->display_options['fields']['map']['exclude'] = TRUE;
+$handler->display->display_options['fields']['map']['element_label_colon'] = FALSE;
 /* Field: characters: online */
 $handler->display->display_options['fields']['online']['id'] = 'online';
 $handler->display->display_options['fields']['online']['table'] = 'characters';
 $handler->display->display_options['fields']['online']['field'] = 'online';
+$handler->display->display_options['fields']['online']['label'] = '';
+$handler->display->display_options['fields']['online']['exclude'] = TRUE;
+$handler->display->display_options['fields']['online']['element_label_colon'] = FALSE;
+/* Field: Level &lt;level&gt; &lt;race&gt; &lt;class&gt; */
+$handler->display->display_options['fields']['php_3']['id'] = 'php_3';
+$handler->display->display_options['fields']['php_3']['table'] = 'views';
+$handler->display->display_options['fields']['php_3']['field'] = 'php';
+$handler->display->display_options['fields']['php_3']['ui_name'] = 'Level <level> <race> <class>';
+$handler->display->display_options['fields']['php_3']['label'] = '';
+$handler->display->display_options['fields']['php_3']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['php_3']['use_php_setup'] = 0;
+$handler->display->display_options['fields']['php_3']['php_output'] = '<?php 
+
+$classList = array(
+\'1\'=>\'Warrior\',
+\'2\'=>\'Paladin\',
+\'3\'=>\'Hunter\',
+\'4\'=>\'Rogue\',
+\'5\'=>\'Priest\',
+\'6\'=>\'Death Knight\',
+\'7\'=>\'Shaman\',
+\'8\'=>\'Mage\',
+\'9\'=>\'Warlock\',
+\'11\'=>\'Druid\'
+);
+ 
+$energyList = array(
+\'1\'=>\'rage\',
+\'2\'=>\'mana\',
+\'3\'=>\'mana\',
+\'4\'=>\'energy\',
+\'5\'=>\'mana\',
+\'6\'=>\'runicpower\',
+\'7\'=>\'mana\',
+\'8\'=>\'mana\',
+\'9\'=>\'mana\',
+\'11\'=>\'mana\'
+);
+
+ 
+$raceList = array(
+\'1\'=>\'Human\',
+\'2\'=>\'Orc\',
+\'3\'=>\'Dwarf\',
+\'4\'=>\'Night Elf\',
+\'5\'=>\'Undead\',
+\'6\'=>\'Tauren\',
+\'7\'=>\'Gnome\',
+\'8\'=>\'Troll\',
+\'9\'=>\'Goblin\',
+\'10\'=>\'Blood Elf\',
+\'11\'=>\'Draenei\',
+\'12\'=>\'Fel Orc\',
+\'13\'=>\'Naga\',
+\'14\'=>\'Broken\',
+\'15\'=>\'Skeleton\',
+\'16\'=>\'Vrykul\',
+\'17\'=>\'Tuskarr\',
+\'18\'=>\'Forest Troll\',
+\'19\'=>\'Taunka\',
+\'20\'=>\'Northrend Skeleton\',
+\'21\'=>\'Ice Troll\'
+);
+ 
+echo "Level ";
+echo $row->level;
+echo " ";
+echo $raceList[$row->race];
+echo " ";
+echo $classList[$row->class];
+
+?>
+';
+$handler->display->display_options['fields']['php_3']['use_php_click_sortable'] = '0';
+$handler->display->display_options['fields']['php_3']['php_click_sortable'] = '';
+/* Field: characters: health */
+$handler->display->display_options['fields']['health']['id'] = 'health';
+$handler->display->display_options['fields']['health']['table'] = 'characters';
+$handler->display->display_options['fields']['health']['field'] = 'health';
+$handler->display->display_options['fields']['health']['label'] = 'Health';
 /* Contextual filter: characters: guid */
 $handler->display->display_options['arguments']['guid']['id'] = 'guid';
 $handler->display->display_options['arguments']['guid']['table'] = 'characters';
@@ -78,3 +180,4 @@ $handler->display->display_options['arguments']['guid']['summary_options']['item
 /* Display: Page */
 $handler = $view->new_display('page', 'Page', 'page');
 $handler->display->display_options['path'] = 'character';
+
