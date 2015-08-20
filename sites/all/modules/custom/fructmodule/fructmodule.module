@@ -19,28 +19,6 @@ function fructmodule_views_api() {
 
 function fructmodule_views_data_alter(&$data) {
 
-//  $data['fruct']['table']['group'] = t('Fruct');   // Advertise this table as a possible base table 
-//  $data['fruct']['table']['base'] = array(
-//    'field' => 'id',
-//    'title' => t('Fruct'),
-//    'weight' => -10,
-//    'access query tag' => 'node_access',
-//    'database' => 'testdb2',
-//    'defaults' => array(
-//      'field' => 'fructz',
-//    ),
-//  );
-//  $data['fructe']['table']['base'] = array();
-////// For other base tables, explain how we join 
-//  $data['fructe']['table']['join'] = array(
-// 
-//    'fruct' => array(
-//      'database' => 'testdb1',
-////      'left_table' => 'testdb1.fruct',
-//      'left_field' => 'tip_fruct',
-//      'field' => 'tip',
-//    ),
-//  );
   $data['fructe']['table']['join'] = array(
     'fruct' => array(
       'database' => 'testdb1',
@@ -52,19 +30,22 @@ function fructmodule_views_data_alter(&$data) {
 }
 
 function fructmodule_views_query_alter(&$view, &$query) {
-  $join = new views_join();
-  $join->table = 'testdb1.fructe';
-  $join->field = 'id';
-  $join->left_table = 'fruct';
-  $join->left_field = 'tip_fruct';
-  $join->type = 'left';
-  $query->add_relationship('fructe', $join, 'fruct');
 
-  if ($view->args) {
-    $query->add_where('tip', "fructe.tip", $view->args[0]);
+  if ($view->name === 'fructe_module_view') {
+
+    $join = new views_join();
+    $join->table = 'testdb1.fructe';
+    $join->field = 'id';
+    $join->left_table = 'fruct';
+    $join->left_field = 'tip_fruct';
+    $join->type = 'left';
+    $query->add_relationship('fructe', $join, 'fruct');
+    if ($view->args) {
+      $query->add_where('tip', "fructe.tip", $view->args[0]);
+    }
+    dpm($query);
+    dpm($view);
   }
-  dpm($query);
-  dpm($view);
 }
 
 ?>

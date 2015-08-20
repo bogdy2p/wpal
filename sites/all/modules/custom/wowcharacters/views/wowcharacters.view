@@ -1,0 +1,12 @@
+<?php
+
+$view = new view();
+$view->name = 'all_my_characters';
+$view->description = 'Description of the allmycharacters views';
+$view->tag = 'default';
+$view->base_table = 'account';
+$view->human_name = 'all_my_characters';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+ 

@@ -19,28 +19,3 @@ function fructmodule_views_default_views() {
     return $views;
   }
 }
-
-/**
- * @file
- * Views definitions for mymodule module.
- */
-
-/**
- * Implements hook_views_data().
- */
-function fructmodule_views_data() {
-
-//
-//  $data['fructe']['table']['name'] = 'testdb1.fructe';
-//  $data['fructe']['table']['group'] = t('Fructe');
-//  $data['fructe']['table']['join'] = array(
-//    'fruct' => array(
-//      'table' => 'testdb2.fruct',
-//      'left_field' => 'tip_fruct',
-//      'field' => 'tip'
-//    ),
-//  );
-//
-//
-//  return $data;
-}

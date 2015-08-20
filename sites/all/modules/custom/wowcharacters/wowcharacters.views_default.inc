@@ -19,4 +19,3 @@ function wowcharacters_views_default_views() {
     return $views;
   }
 }
-
