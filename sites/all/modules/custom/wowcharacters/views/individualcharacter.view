@@ -262,6 +262,8 @@ $charname = $row->name;
                     while ($row_itemEntry = mysql_fetch_array($query_select_itemEntry)) 
                     {
                         $itemEntry = $row_itemEntry[\'itemEntry\'];
+                        print_r("ITEM ENTRY: ");
+                        print_r($itemEntry);
                         if ($itemEntry != "") 
                         {
                             mysql_select_db($config[\'world_db\']);
@@ -328,6 +330,8 @@ $charname = $row->name;
         echo \'</object>\';
         echo \'</div>\';
     }
+    
+
 
 ?>
 
