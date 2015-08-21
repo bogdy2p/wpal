@@ -21,6 +21,11 @@ $handler->display->display_options['exposed_form']['type'] = 'basic';
 $handler->display->display_options['pager']['type'] = 'full';
 $handler->display->display_options['style_plugin'] = 'default';
 $handler->display->display_options['row_plugin'] = 'fields';
+$handler->display->display_options['row_options']['inline'] = array(
+  'name' => 'name',
+  'php' => 'php',
+);
+$handler->display->display_options['row_options']['separator'] = ' - ';
 /* Field: characters: account */
 $handler->display->display_options['fields']['account']['id'] = 'account';
 $handler->display->display_options['fields']['account']['table'] = 'characters';
@@ -52,6 +57,98 @@ $handler->display->display_options['fields']['name']['alter']['make_link'] = TRU
 $handler->display->display_options['fields']['name']['alter']['path'] = 'character/[guid]';
 $handler->display->display_options['fields']['name']['alter']['absolute'] = TRUE;
 $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+/* Field: Global: PHP */
+$handler->display->display_options['fields']['php']['id'] = 'php';
+$handler->display->display_options['fields']['php']['table'] = 'views';
+$handler->display->display_options['fields']['php']['field'] = 'php';
+$handler->display->display_options['fields']['php']['label'] = '';
+$handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+$handler->display->display_options['fields']['php']['php_output'] = '<?php 
+
+$classList = array(
+\'1\'=>\'Warrior\',
+\'2\'=>\'Paladin\',
+\'3\'=>\'Hunter\',
+\'4\'=>\'Rogue\',
+\'5\'=>\'Priest\',
+\'6\'=>\'Death Knight\',
+\'7\'=>\'Shaman\',
+\'8\'=>\'Mage\',
+\'9\'=>\'Warlock\',
+\'11\'=>\'Druid\'
+);
+ 
+$energyList = array(
+\'1\'=>\'rage\',
+\'2\'=>\'mana\',
+\'3\'=>\'mana\',
+\'4\'=>\'energy\',
+\'5\'=>\'mana\',
+\'6\'=>\'runicpower\',
+\'7\'=>\'mana\',
+\'8\'=>\'mana\',
+\'9\'=>\'mana\',
+\'11\'=>\'mana\'
+);
+
+ 
+$raceList = array(
+\'1\'=>\'Human\',
+\'2\'=>\'Orc\',
+\'3\'=>\'Dwarf\',
+\'4\'=>\'Night Elf\',
+\'5\'=>\'Undead\',
+\'6\'=>\'Tauren\',
+\'7\'=>\'Gnome\',
+\'8\'=>\'Troll\',
+\'9\'=>\'Goblin\',
+\'10\'=>\'Blood Elf\',
+\'11\'=>\'Draenei\',
+\'12\'=>\'Fel Orc\',
+\'13\'=>\'Naga\',
+\'14\'=>\'Broken\',
+\'15\'=>\'Skeleton\',
+\'16\'=>\'Vrykul\',
+\'17\'=>\'Tuskarr\',
+\'18\'=>\'Forest Troll\',
+\'19\'=>\'Taunka\',
+\'20\'=>\'Northrend Skeleton\',
+\'21\'=>\'Ice Troll\'
+);
+ 
+echo "Level ";
+echo $row->level;
+echo " ";
+echo $raceList[$row->race];
+echo " ";
+echo $classList[$row->class];
+
+?>
+';
+$handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+$handler->display->display_options['fields']['php']['php_click_sortable'] = '';
+/* Field: characters: level */
+$handler->display->display_options['fields']['level']['id'] = 'level';
+$handler->display->display_options['fields']['level']['table'] = 'characters';
+$handler->display->display_options['fields']['level']['field'] = 'level';
+$handler->display->display_options['fields']['level']['label'] = '';
+$handler->display->display_options['fields']['level']['exclude'] = TRUE;
+$handler->display->display_options['fields']['level']['element_label_colon'] = FALSE;
+/* Field: characters: race */
+$handler->display->display_options['fields']['race']['id'] = 'race';
+$handler->display->display_options['fields']['race']['table'] = 'characters';
+$handler->display->display_options['fields']['race']['field'] = 'race';
+$handler->display->display_options['fields']['race']['label'] = '';
+$handler->display->display_options['fields']['race']['exclude'] = TRUE;
+$handler->display->display_options['fields']['race']['element_label_colon'] = FALSE;
+/* Field: characters: class */
+$handler->display->display_options['fields']['class']['id'] = 'class';
+$handler->display->display_options['fields']['class']['table'] = 'characters';
+$handler->display->display_options['fields']['class']['field'] = 'class';
+$handler->display->display_options['fields']['class']['label'] = '';
+$handler->display->display_options['fields']['class']['exclude'] = TRUE;
+$handler->display->display_options['fields']['class']['element_label_colon'] = FALSE;
 
 /* Display: Page */
 $handler = $view->new_display('page', 'Page', 'page');
