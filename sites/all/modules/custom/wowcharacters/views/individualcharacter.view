@@ -168,6 +168,24 @@ $handler->display->display_options['fields']['health']['id'] = 'health';
 $handler->display->display_options['fields']['health']['table'] = 'characters';
 $handler->display->display_options['fields']['health']['field'] = 'health';
 $handler->display->display_options['fields']['health']['label'] = 'Health';
+/* Field: Global: PHP */
+$handler->display->display_options['fields']['php']['id'] = 'php';
+$handler->display->display_options['fields']['php']['table'] = 'views';
+$handler->display->display_options['fields']['php']['field'] = 'php';
+$handler->display->display_options['fields']['php']['label'] = 'Zone';
+$handler->display->display_options['fields']['php']['alter']['alter_text'] = TRUE;
+$handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+$handler->display->display_options['fields']['php']['php_output'] = '<?php 
+
+//$row->zone
+//echo "zone";
+$result = db_query(\'SELECT z.zone_name FROM {testdb1.zone_names} z WHERE z.zone_id = :zone\', array(\':zone\' => $row->zone));
+
+$record = $result->fetchObject();
+print_r($record->zone_name);
+?>';
+$handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+$handler->display->display_options['fields']['php']['php_click_sortable'] = '';
 /* Contextual filter: characters: guid */
 $handler->display->display_options['arguments']['guid']['id'] = 'guid';
 $handler->display->display_options['arguments']['guid']['table'] = 'characters';
@@ -180,4 +198,5 @@ $handler->display->display_options['arguments']['guid']['summary_options']['item
 /* Display: Page */
 $handler = $view->new_display('page', 'Page', 'page');
 $handler->display->display_options['path'] = 'character';
+
 
