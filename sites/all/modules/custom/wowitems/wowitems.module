@@ -11,7 +11,7 @@
  */
 function wowitems_menu() {
   $items['admin/wowitems'] = array(
-    'title' => 'WoW Accounts From DB',
+    'title' => 'WoW TESTING STUFF',
     'description' => 'wowitems description',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('wowitems_page'),
@@ -27,7 +27,7 @@ function wowitems_menu() {
  */
 function wowitems_page() {
 
- 
+
 
   $accountColumns = [
     "id",
@@ -55,6 +55,8 @@ function wowitems_page() {
     "os",
     "recruiter",
   ];
+  test();
+
 
 
 
@@ -63,65 +65,153 @@ function wowitems_page() {
   db_set_active('auth');
 // Get some data. The same rules about accessing the API functions apply here.
   $results = db_query($sql);
-  echo '<div class="tablewow">';
-  echo '<table class="wowstuff">';
-  echo '<h3> WoW Accounts </h3>';
-  echo '<tr>';
-  foreach ($accountColumns as $columnName) {
-    echo'<td>';
-    echo $columnName;
-    echo'</td>';
-  }
-  echo '</tr>';
-  foreach ($results as $result) {
-    echo '<tr>';
 
-    foreach ($accountColumns as $columnName) {
-      echo'<td>';
-      echo $result->$columnName;
-      echo'</td>';
-    }
+  db_set_active('default');
+}
 
-//    echo'<td>';
-//    echo $result->id;
-//    echo'</td>';
-//    echo'<td>';
-//    echo $result->username;
-//    echo'</td>';
-//    echo'<td>';
-//    echo $result->email;
-//    echo'</td>';
-//    echo'<td>';
-//    echo $result->joindate;
-//    echo'</td>';
-//    echo '</tr>';
-  }
+function test() {
 
-  echo '</table>';
-  echo '</div>';
-// Switch back to the default db.
+//  $charname = $row->name;
+  $errors = 0;
+  $items_array = array();
+  //mysql_select_db($config['char_db']);
+//  $query_select_character = "SELECT guid, race, gender, playerBytes, playerBytes2 FROM characters.characters WHERE name = $charname LIMIT 1";
+
+
+  $query_select_character = "SELECT guid, race, gender, playerBytes, playerBytes2 FROM characters WHERE name = 'Thepbc' LIMIT 1";
+
+  db_set_active('characters');
+  $result_select_character = db_query($query_select_character);
   db_set_active('default');
 
 
-//  $form['wowitems_words'] = array(
-//    '#type' => 'textarea',
-//    '#title' => t('Words to include in the list'),
-//    '#description' => t('The words included in this list will be availlable to Rules and other modules making use of the global "site" entity.'),
-//    '#default_value' => implode("\r\n", variable_get('wowitems_words', array())),
-//  );
-//
-//  $form['submit'] = array(
-//    '#type' => 'submit',
-//    '#value' => t('Save'),
-//  );
-//
-//  
-//  
-////  dpm($newcon->getConnectionOptions());
-//
-//
-//
-//  return $form;
+
+//  print_r($row);
+//  print_r($result_select_character->rowCount());
+//  echo"<pre>";
+//  die();
+
+
+
+  if ($result_select_character->rowCount() == 1) { // If OK
+    $row = $result_select_character->fetchAssoc();
+
+    $guid = $row['guid'];
+    $race = $row['race'];
+    $gender = $row['gender'];
+    $b = $row['playerBytes'];
+    $b2 = $row['playerBytes2'];
+
+    // Set Character Features
+    $ha = ($b >> 16) % 256;
+    $hc = ($b >> 24) % 256;
+    $fa = ($b >> 8) % 256;
+    $sk = $b % 256;
+    $fh = $b2 % 256;
+
+    // Set Character Race/Gender
+    $char_race = array(
+      1 => 'human',
+      2 => 'orc',
+      3 => 'dwarf',
+      4 => 'nightelf',
+      5 => 'scourge',
+      6 => 'tauren',
+      7 => 'gnome',
+      8 => 'troll',
+      10 => 'bloodelf',
+      11 => 'draenei');
+
+    $char_gender = array(
+      0 => 'male',
+      1 => 'female');
+
+    $rg = $char_race[$race] . $char_gender[$gender];
+
+
+    $query_select_guid_drupal = "SELECT item FROM character_inventory WHERE guid = '$guid' AND bag='0' AND slot <'18'";
+
+    db_set_active('characters');
+    $result_select_guid_drupal = db_query($query_select_guid_drupal);
+    db_set_active('default');
+
+
+    print_r($result_select_guid_drupal->rowCount());
+
+
+
+
+    die('dead');
+//    $query_select_guid = mysql_query("SELECT item FROM character_inventory WHERE guid = '$guid' AND bag='0' AND slot <'18'");
+    if (mysql_num_rows($query_select_guid) != 0) {
+      $eq = "";
+      while ($row_select_guid = mysql_fetch_array($query_select_guid)) {
+        $item = $row_select_guid['item'];
+        mysql_select_db($config['char_db']);
+        $query_select_itemEntry = mysql_query("SELECT itemEntry FROM item_instance WHERE guid = '$item'");
+        if (mysql_num_rows($query_select_itemEntry) != 0) {
+          while ($row_itemEntry = mysql_fetch_array($query_select_itemEntry)) {
+            $itemEntry = $row_itemEntry['itemEntry'];
+            if ($itemEntry != "") {
+              $items_array[] = $itemEntry;
+
+              mysql_select_db($config['world_db']);
+              $query_select_item = "SELECT displayid, InventoryType FROM item_template WHERE entry = '$itemEntry' LIMIT 1";
+              $result_select_item = mysql_query($query_select_item);
+              if (!mysql_num_rows($result_select_item) == 0) {
+                $row_item = mysql_fetch_array($result_select_item);
+                $displayid = $row_item['displayid'];
+                $inventory_type = $row_item['InventoryType'];
+                if ($eq == "") {
+                  $eq = $inventory_type . ',' . $displayid;
+                }
+                else {
+                  $eq .= ',' . $inventory_type . ',' . $displayid;
+                }
+              }
+              else {
+                // If not OK
+                echo '<p>The DisplayID could not be retrieved. We apologize for any inconvenience.</p>'; // Public message.
+                //echo '<p>' . mysql_error() . '<br /><br />Query: ' . $query . '</p>'; // Debugging message.
+                $errors++;
+              }
+            }
+            else {
+              // If not OK
+              echo '<p>The itemEntry could not be retrieved. We apologize for any inconvenience.</p>'; // Public message.
+              //echo '<p>' . mysql_error() . '<br /><br />Query: ' . $query . '</p>'; // Debugging message.
+              $errors++;
+            }
+          }
+        }
+        else {
+          // If not OK
+          echo '<p>The Inventory could not be retrieved. We apologize for any inconvenience.</p>'; // Public message.
+          //echo '<p>' . mysql_error() . '<br /><br />Query: ' . $query . '</p>'; // Debugging message.
+          $errors++;
+        }
+      }
+    }
+  }
+  else {
+    // If not OK
+    echo '<p>The Character could not be retrieved. We apologize for any inconvenience.</p>'; // Public message.
+    //echo '<p>' . mysql_error() . '<br /><br />Query: ' . $query . '</p>'; // Debugging message.
+    $errors++;
+  }
+  if ($errors == 0) {
+    echo '<div id="model_scene" align="center">';
+    echo '<object id="wowhead" type="application/x-shockwave-flash" data="http://static.wowhead.com/modelviewer/ModelView.swf" height="400px" width="300px">';
+    echo '<param name="quality" value="high">';
+    echo '<param name="allowscriptaccess" value="always">';
+    echo '<param name="menu" value="false">';
+    echo '<param value="transparent" name="wmode">';
+    echo printf('<param name="flashvars" value="model=%s&amp;modelType=16&amp;ha=%s&amp;hc=%s&amp;fa=%s&amp;sk=%s&amp;fh=%s&amp;fc=0&amp;contentPath=http://static.wowhead.com/modelviewer/&amp;blur=0&amp;equipList=%s">', $rg, $ha, $hc, $fa, $sk, $fh, $eq);
+    echo '<param name="movie" value="http://static.wowhead.com/modelviewer/ModelView.swf">';
+    echo '</object>';
+    echo '</div>';
+    print_r($items_array);
+  }
 }
 
 /**
@@ -133,50 +223,4 @@ function wowitems_page_submit($form, $form_state) {
 //  wordlist_save_list($words);
 //  drupal_set_message(t('The words have been saved!'));
 //  dpm($words);
-}
-
-/**
- * Stores the globally accesible Word list words.
- * @param $words
- *  An array containing the words that should be stored.
- */
-function wowitems_save_list(array $words) {
-//  $removed = 0;
-//  foreach ($words as $key => $value) {
-//    if (strlen($value) == 0) {
-//      unset($words[$key]);
-//      $removed++;
-//    }
-//  }
-//  //If any strings were removed , notify the user.
-//  if ($removed > 0) {
-//    drupal_set_message(t(
-//            'Removed @number empty words.', array('@number' => $removed))
-//    );
-//  }
-//  // Store the words in the variables table.
-//  variable_set('wowitems_words', $words);
-}
-
-/**
- * Fetches the list of words as defined by Wordlist Module.
- * @return 
- *  An array of words not sanitized.
- */
-function wowitems_get_list() {
-//  return variable_get('wowitems_words', array());
-}
-
-/**
- * Implements hook_entity_property_info_alter(). 
- * @param type $info
- */
-function wowitems_entity_property_info_alter(&$info) {
-//  $info['site']['properties']['wowitems_words'] = array(
-//    'label' => t('Wowitems list'),
-//    'description' => t('A list of words as defined by the Wowitems list module'),
-//    'getter callback' => 'wowitems_get_list',
-//    'sanitize' => 'check_plain',
-//    'type' => 'list<text>',
-//  );
 }

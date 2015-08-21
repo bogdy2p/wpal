@@ -197,19 +197,20 @@ $handler->display->display_options['fields']['php_1']['php_output'] = '<?php
 echo "3D VIEW";
 ?>
 <?php
-$config[\'ip\'] = "localhost";
-$config[\'user\'] = "root";
-$config[\'pass\'] = "romania";
-$config[\'char_db\'] = "characters";
-$config[\'world_db\'] = "world";
-$dbc = mysql_connect($config[\'ip\'], $config[\'user\'], $config[\'pass\']);
+//$config[\'ip\'] = "localhost";
+//$config[\'user\'] = "root";
+//$config[\'pass\'] = "romania";
+//$config[\'char_db\'] = "characters";
+//$config[\'world_db\'] = "world";
+//$dbc = mysql_connect($config[\'ip\'], $config[\'user\'], $config[\'pass\']);
 
 ?>
 <?php 
-$charname = $row->name;
+   $charname = $row->name;
     $errors = 0;
    $items_array = array();
-    mysql_select_db($config[\'char_db\']);
+    //mysql_select_db($config[\'char_db\']);
+    
     $query_select_character = "SELECT guid, race, gender, playerBytes, playerBytes2 FROM characters WHERE name = \'".mysql_real_escape_string($charname)."\' LIMIT 1";
     $result_select_character = mysql_query($query_select_character);
 
