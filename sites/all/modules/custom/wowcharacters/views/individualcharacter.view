@@ -186,6 +186,156 @@ print_r($record->zone_name);
 ?>';
 $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
 $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
+/* Field: Global: PHP */
+$handler->display->display_options['fields']['php_1']['id'] = 'php_1';
+$handler->display->display_options['fields']['php_1']['table'] = 'views';
+$handler->display->display_options['fields']['php_1']['field'] = 'php';
+$handler->display->display_options['fields']['php_1']['label'] = '';
+$handler->display->display_options['fields']['php_1']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['php_1']['use_php_setup'] = 0;
+$handler->display->display_options['fields']['php_1']['php_output'] = '
+<?php
+$config[\'ip\'] = "localhost";
+$config[\'user\'] = "root";
+$config[\'pass\'] = "JN4LEEP";
+$config[\'char_db\'] = "characters";
+$config[\'world_db\'] = "world";
+$dbc = mysql_connect($config[\'ip\'], $config[\'user\'], $config[\'pass\']);
+
+?>
+<?php 
+$charname = $row->name;
+    $errors = 0;
+
+    mysql_select_db($config[\'char_db\']);
+    $query_select_character = "SELECT guid, race, gender, playerBytes, playerBytes2 FROM characters WHERE name = \'".mysql_real_escape_string($charname)."\' LIMIT 1";
+    $result_select_character = mysql_query($query_select_character);
+
+    if (!mysql_num_rows($result_select_character) == 0) 
+    { // If OK
+
+        $row = mysql_fetch_array($result_select_character);
+
+        $guid = $row[\'guid\'];
+        $race = $row[\'race\'];
+        $gender = $row[\'gender\'];
+        $b = $row[\'playerBytes\'];
+        $b2 = $row[\'playerBytes2\'];
+
+        // Set Character Features
+        $ha = ($b>>16)%256;
+        $hc = ($b>>24)%256;
+        $fa = ($b>>8)%256;
+        $sk = $b%256;
+        $fh = $b2%256;
+
+        // Set Character Race/Gender
+        $char_race = array(
+        1 => \'human\',
+        2 => \'orc\',
+        3 => \'dwarf\',
+        4 => \'nightelf\',
+        5 => \'scourge\',
+        6 => \'tauren\',
+        7 => \'gnome\',
+        8 => \'troll\',
+        10 => \'bloodelf\',
+        11 => \'draenei\');
+
+        $char_gender = array(
+        0 => \'male\',
+        1 => \'female\');
+
+        $rg = $char_race[$race].$char_gender[$gender];
+
+        $query_select_guid = mysql_query("SELECT item FROM character_inventory WHERE guid = \'$guid\' AND bag=\'0\' AND slot <\'18\'");
+        if (mysql_num_rows($query_select_guid) != 0) 
+        {
+            $eq = "";
+            while($row_select_guid = mysql_fetch_array($query_select_guid))
+            {
+                $item = $row_select_guid[\'item\'];
+                mysql_select_db($config[\'char_db\']);
+                $query_select_itemEntry = mysql_query("SELECT itemEntry FROM item_instance WHERE guid = \'$item\'");
+                if (mysql_num_rows($query_select_itemEntry) != 0) 
+                {
+                    while ($row_itemEntry = mysql_fetch_array($query_select_itemEntry)) 
+                    {
+                        $itemEntry = $row_itemEntry[\'itemEntry\'];
+                        if ($itemEntry != "") 
+                        {
+                            mysql_select_db($config[\'world_db\']);
+                            $query_select_item = "SELECT displayid, InventoryType FROM item_template WHERE entry = \'$itemEntry\' LIMIT 1";
+                            $result_select_item = mysql_query($query_select_item);
+                            if (!mysql_num_rows($result_select_item) == 0) 
+                            {
+                                $row_item = mysql_fetch_array($result_select_item);
+                                $displayid = $row_item[\'displayid\'];
+                                $inventory_type = $row_item[\'InventoryType\'];
+                                if ($eq == "") 
+                                {
+                                    $eq = $inventory_type.\',\'.$displayid;
+                                } else 
+                                {
+                                    $eq .= \',\'.$inventory_type.\',\'.$displayid;
+                                }
+                            } 
+                            else 
+                            {
+                                // If not OK
+                                echo \'<p>The DisplayID could not be retrieved. We apologize for any inconvenience.</p>\'; // Public message.
+                                //echo \'<p>\' . mysql_error() . \'<br /><br />Query: \' . $query . \'</p>\'; // Debugging message.
+                                $errors++;
+                            }
+                        }
+                        else 
+                        {
+                            // If not OK
+                            echo \'<p>The itemEntry could not be retrieved. We apologize for any inconvenience.</p>\'; // Public message.
+                            //echo \'<p>\' . mysql_error() . \'<br /><br />Query: \' . $query . \'</p>\'; // Debugging message.
+                            $errors++;
+                        }
+                    }
+                } 
+                else 
+                { 
+                    // If not OK
+                    echo \'<p>The Inventory could not be retrieved. We apologize for any inconvenience.</p>\'; // Public message.
+                    //echo \'<p>\' . mysql_error() . \'<br /><br />Query: \' . $query . \'</p>\'; // Debugging message.
+                    $errors++;
+                }
+            }
+        } 
+    }
+    else 
+    { 
+        // If not OK
+        echo \'<p>The Character could not be retrieved. We apologize for any inconvenience.</p>\'; // Public message.
+        //echo \'<p>\' . mysql_error() . \'<br /><br />Query: \' . $query . \'</p>\'; // Debugging message.
+        $errors++;
+    }
+
+    if ($errors == 0) 
+    {
+        echo \'<div id="model_scene" align="center">\';
+        echo \'<object id="wowhead" type="application/x-shockwave-flash" data="http://static.wowhead.com/modelviewer/ModelView.swf" height="400px" width="300px">\';
+        echo \'<param name="quality" value="high">\';
+        echo \'<param name="allowscriptaccess" value="always">\';
+        echo \'<param name="menu" value="false">\';
+        echo \'<param value="transparent" name="wmode">\';
+        echo printf(\'<param name="flashvars" value="model=%s&amp;modelType=16&amp;ha=%s&amp;hc=%s&amp;fa=%s&amp;sk=%s&amp;fh=%s&amp;fc=0&amp;contentPath=http://static.wowhead.com/modelviewer/&amp;blur=0&amp;equipList=%s">\', $rg,$ha,$hc,$fa,$sk,$fh,$eq);
+        echo \'<param name="movie" value="http://static.wowhead.com/modelviewer/ModelView.swf">\';
+        echo \'</object>\';
+        echo \'</div>\';
+    }
+
+?>
+
+<?php
+mysql_close($dbc);
+?>';
+$handler->display->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
+$handler->display->display_options['fields']['php_1']['php_click_sortable'] = '';
 /* Contextual filter: characters: guid */
 $handler->display->display_options['arguments']['guid']['id'] = 'guid';
 $handler->display->display_options['arguments']['guid']['table'] = 'characters';
@@ -198,5 +348,6 @@ $handler->display->display_options['arguments']['guid']['summary_options']['item
 /* Display: Page */
 $handler = $view->new_display('page', 'Page', 'page');
 $handler->display->display_options['path'] = 'character';
+
 
 
