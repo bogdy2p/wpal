@@ -193,11 +193,13 @@ $handler->display->display_options['fields']['php_1']['field'] = 'php';
 $handler->display->display_options['fields']['php_1']['label'] = '';
 $handler->display->display_options['fields']['php_1']['element_label_colon'] = FALSE;
 $handler->display->display_options['fields']['php_1']['use_php_setup'] = 0;
-$handler->display->display_options['fields']['php_1']['php_output'] = '
+$handler->display->display_options['fields']['php_1']['php_output'] = '<?php
+echo "3D VIEW";
+?>
 <?php
 $config[\'ip\'] = "localhost";
 $config[\'user\'] = "root";
-$config[\'pass\'] = "JN4LEEP";
+$config[\'pass\'] = "romania";
 $config[\'char_db\'] = "characters";
 $config[\'world_db\'] = "world";
 $dbc = mysql_connect($config[\'ip\'], $config[\'user\'], $config[\'pass\']);
@@ -206,7 +208,7 @@ $dbc = mysql_connect($config[\'ip\'], $config[\'user\'], $config[\'pass\']);
 <?php 
 $charname = $row->name;
     $errors = 0;
-
+   $items_array = array();
     mysql_select_db($config[\'char_db\']);
     $query_select_character = "SELECT guid, race, gender, playerBytes, playerBytes2 FROM characters WHERE name = \'".mysql_real_escape_string($charname)."\' LIMIT 1";
     $result_select_character = mysql_query($query_select_character);
@@ -262,10 +264,10 @@ $charname = $row->name;
                     while ($row_itemEntry = mysql_fetch_array($query_select_itemEntry)) 
                     {
                         $itemEntry = $row_itemEntry[\'itemEntry\'];
-                        print_r("ITEM ENTRY: ");
-                        print_r($itemEntry);
                         if ($itemEntry != "") 
                         {
+                        $items_array[] = $itemEntry;
+
                             mysql_select_db($config[\'world_db\']);
                             $query_select_item = "SELECT displayid, InventoryType FROM item_template WHERE entry = \'$itemEntry\' LIMIT 1";
                             $result_select_item = mysql_query($query_select_item);
@@ -316,7 +318,6 @@ $charname = $row->name;
         //echo \'<p>\' . mysql_error() . \'<br /><br />Query: \' . $query . \'</p>\'; // Debugging message.
         $errors++;
     }
-
     if ($errors == 0) 
     {
         echo \'<div id="model_scene" align="center">\';
@@ -329,9 +330,8 @@ $charname = $row->name;
         echo \'<param name="movie" value="http://static.wowhead.com/modelviewer/ModelView.swf">\';
         echo \'</object>\';
         echo \'</div>\';
+      print_r($items_array);
     }
-    
-
 
 ?>
 
