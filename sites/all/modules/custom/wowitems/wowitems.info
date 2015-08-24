@@ -3,3 +3,4 @@ description = WoW Items List
 core = 7.x
 package = Experimental
 dependencies[] = entity
+files[] = character3D.php
