@@ -78,25 +78,19 @@ function test() {
 //  $query_select_character = "SELECT guid, race, gender, playerBytes, playerBytes2 FROM characters.characters WHERE name = $charname LIMIT 1";
 
 
-  $query_select_character = "SELECT guid, race, gender, playerBytes, playerBytes2 FROM characters WHERE name = 'Thepbc' LIMIT 1";
+  $query_select_character = "SELECT guid, race, gender, playerBytes, playerBytes2 FROM characters WHERE name = 'Locku' LIMIT 1";
 
   db_set_active('characters');
   $result_select_character = db_query($query_select_character);
   db_set_active('default');
 
 
-
-//  print_r($row);
-//  print_r($result_select_character->rowCount());
-//  echo"<pre>";
-//  die();
-
-
-
   if ($result_select_character->rowCount() == 1) { // If OK
     $row = $result_select_character->fetchAssoc();
 
-    $guid = $row['guid'];
+    $character_unique_id = $row['guid'];
+    print_r("Character Unique Id is: ");
+    print_r($character_unique_id);
     $race = $row['race'];
     $gender = $row['gender'];
     $b = $row['playerBytes'];
@@ -129,62 +123,99 @@ function test() {
     $rg = $char_race[$race] . $char_gender[$gender];
 
 
-    $query_select_guid_drupal = "SELECT item FROM character_inventory WHERE guid = '$guid' AND bag='0' AND slot <'18'";
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+
+
 
     db_set_active('characters');
+    $query_select_guid_drupal = "SELECT item FROM character_inventory WHERE guid = '$character_unique_id' AND bag='0' AND slot <'18'";
     $result_select_guid_drupal = db_query($query_select_guid_drupal);
     db_set_active('default');
-
-
-    print_r($result_select_guid_drupal->rowCount());
-
-
-
-
-    die('dead');
-//    $query_select_guid = mysql_query("SELECT item FROM character_inventory WHERE guid = '$guid' AND bag='0' AND slot <'18'");
-    if (mysql_num_rows($query_select_guid) != 0) {
+//    print_r($result_select_guid_drupal->fetchAssoc());
+//    die('asd');
+    if ($result_select_guid_drupal->rowCount() != 0) {
       $eq = "";
-      while ($row_select_guid = mysql_fetch_array($query_select_guid)) {
-        $item = $row_select_guid['item'];
-        mysql_select_db($config['char_db']);
-        $query_select_itemEntry = mysql_query("SELECT itemEntry FROM item_instance WHERE guid = '$item'");
-        if (mysql_num_rows($query_select_itemEntry) != 0) {
-          while ($row_itemEntry = mysql_fetch_array($query_select_itemEntry)) {
-            $itemEntry = $row_itemEntry['itemEntry'];
+
+      $array_select_guid_drupal = $result_select_guid_drupal->fetchAssoc();
+
+//      print_r(count($array_select_guid_drupal));
+//      die();
+      while ($array_select_guid_drupal) {
+
+        $item = $array_select_guid_drupal['item'];
+        db_set_active('characters');
+        $query_select_itemEntry_drupal = "SELECT itemEntry FROM item_instance WHERE guid = '$item'";
+        $result_select_itemEntry_drupal = db_query($query_select_itemEntry_drupal);
+        db_set_active('default');
+
+        if ($result_select_itemEntry_drupal->rowCount() != 0) {
+          $row_itemEntry_array = $result_select_itemEntry_drupal->fetchAssoc();
+
+          while ($row_itemEntry_array) {
+//            die('157');
+            print_r($row_itemEntry_array);
+            die();
+            $itemEntry = $row_itemEntry_array['itemEntry'];
             if ($itemEntry != "") {
               $items_array[] = $itemEntry;
+              print_r($items_array);
+//              die('162');
+//              var_dump($items_array);
+//              die('dead@178');
+              $query_select_item_drupal = "SELECT displayid, InventoryType FROM item_template WHERE entry = '$itemEntry' LIMIT 1";
+              db_set_active('world');
+              $result_select_item_drupal = db_query($query_select_item_drupal);
+              db_set_active('default');
 
-              mysql_select_db($config['world_db']);
-              $query_select_item = "SELECT displayid, InventoryType FROM item_template WHERE entry = '$itemEntry' LIMIT 1";
-              $result_select_item = mysql_query($query_select_item);
-              if (!mysql_num_rows($result_select_item) == 0) {
-                $row_item = mysql_fetch_array($result_select_item);
+
+//               $result_select_item_drupal = $query_select_item_drupal->fetchAssoc();
+
+              if ($result_select_item_drupal->rowCount() != 0) {
+
+//                die('dead 175');
+                $result_select_item_drupal_array = $result_select_item_drupal->fetchAssoc();
+                $row_item = $result_select_item_drupal_array;
+                print_r($row_item);
+//                die('179');
+
                 $displayid = $row_item['displayid'];
                 $inventory_type = $row_item['InventoryType'];
                 if ($eq == "") {
+//                    print_r($displayid);
+//                  die('eq is zero');
                   $eq = $inventory_type . ',' . $displayid;
+//                  print_r($eq);
                 }
                 else {
                   $eq .= ',' . $inventory_type . ',' . $displayid;
                 }
+
+//                die('193');
               }
               else {
+                die('ERROR SET 1');
                 // If not OK
                 echo '<p>The DisplayID could not be retrieved. We apologize for any inconvenience.</p>'; // Public message.
-                //echo '<p>' . mysql_error() . '<br /><br />Query: ' . $query . '</p>'; // Debugging message.
+                echo '<p>' . mysql_error() . '<br /><br />Query: ' . $query . '</p>'; // Debugging message.
                 $errors++;
               }
             }
             else {
+              die('ERROR SET 2');
               // If not OK
               echo '<p>The itemEntry could not be retrieved. We apologize for any inconvenience.</p>'; // Public message.
               //echo '<p>' . mysql_error() . '<br /><br />Query: ' . $query . '</p>'; // Debugging message.
               $errors++;
             }
           }
+          die('asd');
         }
         else {
+          die('ERROR SET 3');
           // If not OK
           echo '<p>The Inventory could not be retrieved. We apologize for any inconvenience.</p>'; // Public message.
           //echo '<p>' . mysql_error() . '<br /><br />Query: ' . $query . '</p>'; // Debugging message.
@@ -192,6 +223,8 @@ function test() {
         }
       }
     }
+    print_r($eq);
+//    die();
   }
   else {
     // If not OK
@@ -210,17 +243,6 @@ function test() {
     echo '<param name="movie" value="http://static.wowhead.com/modelviewer/ModelView.swf">';
     echo '</object>';
     echo '</div>';
-    print_r($items_array);
+//    print_r($items_array);
   }
-}
-
-/**
- * Submit function for the wordlist configuration page.
- */
-function wowitems_page_submit($form, $form_state) {
-//  //Break up the list of words by line breaks.
-//  $words = explode("\r\n", $form_state['input']['wordlist_words']);
-//  wordlist_save_list($words);
-//  drupal_set_message(t('The words have been saved!'));
-//  dpm($words);
 }
