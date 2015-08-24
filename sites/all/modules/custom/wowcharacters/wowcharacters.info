@@ -3,3 +3,4 @@ description = A module that displays the characters of the current logged in acc
 core = 7.x
 package = WoW
 dependencies[] = entity
+files[] = character3D.php

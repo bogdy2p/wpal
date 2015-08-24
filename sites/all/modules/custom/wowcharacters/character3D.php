@@ -54,7 +54,7 @@ class character3D {
    */
   public function __construct($characterName) {
     $this->characterName = $characterName;
-    $this->initialize($this->characterName);
+    $this->initialize();
   }
 
   /**
