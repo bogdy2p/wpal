@@ -44,6 +44,7 @@ class character3D {
   public $items_array;
   public $item_entries;
   public $displayid_inventoryType;
+  public $eq;
 
   public function __construct($characterName) {
     $this->characterName = $characterName;
@@ -121,24 +122,26 @@ class character3D {
     }
     return null;
   }
-/**
- * 
- */
+
+  /**
+   * 
+   */
   function get_item_entry() {
     $items_array = $this->items_array;
     db_set_active('characters');
     foreach ($items_array as $item_in_array) {
       $itemString = $item_in_array->item;
-      print_r($itemString);
+//      print_r($itemString);
       $query_select_itemEntry = "SELECT itemEntry FROM item_instance WHERE guid = '$itemString'";
       $result_select_itemEntry = db_query($query_select_itemEntry);
       $this->item_entries[$itemString] = $result_select_itemEntry->fetch();
     }
     db_set_active('default');
   }
-/**
- * 
- */
+
+  /**
+   * 
+   */
   function get_display_ids_and_inventory_types() {
     if ($this->item_entries != "") {
       $items_array = $this->item_entries;
@@ -152,28 +155,38 @@ class character3D {
       db_set_active('default');
     }
   }
+/**
+ * 
+ */
+  function test() {
+    foreach ($this->displayid_inventoryType as $row_item) {
+      $displayid = $row_item->displayid;
+      $inventory_type = $row_item->InventoryType;
+      if ($this->eq == "") {
+        $this->eq = $inventory_type . ',' . $displayid;
+      }
+      else {
+       $this->eq .= ',' . $inventory_type . ',' . $displayid;
+      }
+    }
+//    print_r($this->eq);
+  }
+  /**
+   * 
+   */
+  function complete(){
+//     if ($errors == 0) {
+    echo '<div id="model_scene" align="center">';
+    echo '<object id="wowhead" type="application/x-shockwave-flash" data="http://static.wowhead.com/modelviewer/ModelView.swf" height="400px" width="300px">';
+    echo '<param name="quality" value="high">';
+    echo '<param name="allowscriptaccess" value="always">';
+    echo '<param name="menu" value="false">';
+    echo '<param value="transparent" name="wmode">';
+    echo printf('<param name="flashvars" value="model=%s&amp;modelType=16&amp;ha=%s&amp;hc=%s&amp;fa=%s&amp;sk=%s&amp;fh=%s&amp;fc=0&amp;contentPath=http://static.wowhead.com/modelviewer/&amp;blur=0&amp;equipList=%s">', $this->rg, $this->ha, $this->hc, $this->fa, $this->sk, $this->fh, $this->eq);
+    echo '<param name="movie" value="http://static.wowhead.com/modelviewer/ModelView.swf">';
+    echo '</object>';
+    echo '</div>';
+  }
+//}
 
-//      die();
-//      print_r($this->displayid_inventoryType);
-//      die();
-//      if ($result_select_item_drupal->rowCount() != 0) {
-//
-//        $result_select_item_drupal_array = $result_select_item_drupal->fetchAssoc();
-//
-//        $row_item = $result_select_item_drupal_array;
-//        $displayid = $row_item['displayid'];
-//        $inventory_type = $row_item['InventoryType'];
-//        if ($eq == "") {
-//          $eq = $inventory_type . ',' . $displayid;
-//        }
-//        else {
-//          $eq .= ',' . $inventory_type . ',' . $displayid;
-//        }
-//      }
-//      else {
-//        die('ERROR SET 1');
-//        // If not OK
-//        echo '<p>The DisplayID could not be retrieved. We apologize for any inconvenience.</p>'; // Public message.
-//        $errors++;
-//      }
 }
