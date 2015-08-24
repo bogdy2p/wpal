@@ -6,9 +6,9 @@
  * account within the trinity database using the same credentials from the drupal
  * site.
  */
-
 function wowaccount_form_alter(&$form, &$form_state, $form_id) {
 //  print_r($form_id);
+
   if ($form_id == 'user_register_form') {
     $form['#validate'][] = 'wowaccount_account_create';
   }
@@ -18,16 +18,17 @@ function wowaccount_form_alter(&$form, &$form_state, $form_id) {
  * Function that actually creates the server account using the POST data of the 
  * submitted form.
  */
-function wowaccount_account_create() {
+function wowaccount_account_create($form, &$form_state) {
 
+  //If the form has errors , prevent adding the account in the wow database ! 
+  if (form_get_errors())
+    return;
 //  Inside here we should create the new account for the user on the wow database
   //If the password validation is successfull
   if ($_POST['pass']['pass1'] === $_POST['pass']['pass2']) {
     $user = strtoupper($_POST['name']);
     $password = strtoupper($_POST['pass']['pass1']);
 
-    
-//    $sha_hash = SHA1($user . ':' . $password);
     $sha_hash = encode_sha_password($user, $password);
     db_set_active('auth');
     db_insert('account')->fields(array(
