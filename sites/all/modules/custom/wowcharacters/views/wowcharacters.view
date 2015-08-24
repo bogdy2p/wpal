@@ -1,5 +1,4 @@
 <?php
-
 $view = new view();
 $view->name = 'all_my_characters';
 $view->description = 'Description of the allmycharacters views';
@@ -57,12 +56,16 @@ $handler->display->display_options['fields']['name']['alter']['make_link'] = TRU
 $handler->display->display_options['fields']['name']['alter']['path'] = 'character/[guid]';
 $handler->display->display_options['fields']['name']['alter']['absolute'] = TRUE;
 $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['name']['empty'] = 'No Characters On This Account.';
+$handler->display->display_options['fields']['name']['hide_empty'] = TRUE;
+$handler->display->display_options['fields']['name']['empty_zero'] = TRUE;
 /* Field: Global: PHP */
 $handler->display->display_options['fields']['php']['id'] = 'php';
 $handler->display->display_options['fields']['php']['table'] = 'views';
 $handler->display->display_options['fields']['php']['field'] = 'php';
 $handler->display->display_options['fields']['php']['label'] = '';
 $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['php']['empty'] = 'Create a character and come back.';
 $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
 $handler->display->display_options['fields']['php']['php_output'] = '<?php 
 
@@ -116,14 +119,15 @@ $raceList = array(
 \'20\'=>\'Northrend Skeleton\',
 \'21\'=>\'Ice Troll\'
 );
- 
+
+if($row->level){
 echo "Level ";
 echo $row->level;
 echo " ";
 echo $raceList[$row->race];
 echo " ";
 echo $classList[$row->class];
-
+}
 ?>
 ';
 $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';

@@ -25,7 +25,7 @@ function wowcharacters_views_data_alter(&$data) {
       'left_field' => 'account',
       'field' => 'id',
     ),
-  ); 
+  );
 }
 
 /**
@@ -35,6 +35,8 @@ function wowcharacters_views_data_alter(&$data) {
  */
 function wowcharacters_views_query_alter(&$view, &$query) {
   if ($view->name == 'all_my_characters') {
+    global $user;
+
     $join = new views_join();
     $join->table = 'characters.characters';
     $join->field = 'account';
@@ -42,11 +44,12 @@ function wowcharacters_views_query_alter(&$view, &$query) {
     $join->left_field = 'id';
     $join->type = 'left';
     $query->add_relationship('characters', $join, 'account');
-    if ($view->args) {
-      $query->add_where('account', "account", $view->args[0]);
+
+    if ($user->mail != "wowpal@laptop.com") {
+//      $query->add_where('account', "account", $view->args[0]);
+      $query->add_where('account', "email", $user->mail);
     }
   }
 }
-
 
 ?>
